@@ -1,0 +1,111 @@
+doctype html
+html
+    head
+        title 西伯太努力加载中…
+        style
+            :stylus
+                @import "frag/hack"
+                @import "theme/preLoad"
+                html,body
+                    padding 0
+                    margin 0
+                    width 100%
+                    height 100%
+                    min-height 430px
+                    position relative
+                .themeSel
+                    position fixed
+                    top 12%
+                    right 0
+                    .btnSel
+                        width 36px
+                        height 36px
+                        transition all 0.6s
+                .content
+                    width 400px
+                    height 360px
+                    margin auto
+                    position absolute
+                    top 0
+                    right 0
+                    left 0
+                    bottom 30%
+                    .img
+                        cursor: default
+                        width 100%
+                        height 260px
+                        background-repeat:no-repeat
+                        background-size:cover
+                        -moz-background-size:cover
+                        -webkit-background-size:cover
+                        transition all 0.6s
+                    .progressBar
+                        width 100%
+                        height 8px
+                        border-radius 4px
+                        //border 1px solid #A28C6D
+                        position relative
+                        transition all 0.6s
+                        .progress
+                            height 100%
+                            position absolute
+                            top 0
+                            width 100%
+                            border-radius 6px
+                            animation loading 2s
+                            animation-iteration-count infinite
+                            transition all 0.6s
+                        .progressBg
+                            width 100%
+                            height 100%
+                            border-radius 6px
+                            transition all 0.6s
+                        @keyframes loading
+                            from
+                                width 0%
+                            to
+                                width 100%
+                    .msg
+                        font-family "Microsoft YaHei"
+                        text-align center
+                        margin-top 32px
+                        transition all 0.6s
+                        p
+                            margin 6px auto
+                .footer
+                    position absolute
+                    bottom 0
+                    width 100%
+                    min-width 400px
+                    font-family "Microsoft YaHei"
+                    font-size 8px
+                    text-align center
+                    transition all 0.6s
+                    .link
+                        margin 12px auto
+                        a
+                            transition all 0.6s
+    body(class="theme_"+Th)
+        div.themeSel
+            -for(var i=1;i<=ThLen;i++)
+                div.btnSel(onclick="var body=document.querySelectorAll('body')[0].classList;body.remove(body[0]);body.add('theme_"+i+"')")
+        div.content
+            div.img
+            div.progressBar
+                div.progress
+                div.progressBg
+            div.msg
+                p 网站建设中…
+                p 如果有什么建议，请联系1132463097。
+        div.footer
+            div.link
+                span &nbsp;|&nbsp;
+                a(href="#") 助屋简介
+                span &nbsp;|&nbsp;
+                a(href="#") 关于本站
+                span &nbsp;|&nbsp;
+                a(href="#") 建议反馈
+                span &nbsp;|&nbsp;build 0.1.2
+            p 本站为非盈利网站，图片、视频、漫画等来源网络，相关权利归制作者所有。图片、视频、漫画等内容中涉及的包括但不限于插图、立绘图标、界面设计等的版权均归其版权所有者。感谢助屋作者あやか为我们带来的这一切。
+        script.preFile
+        script.preFile
