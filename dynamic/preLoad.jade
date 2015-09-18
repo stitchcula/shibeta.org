@@ -85,6 +85,8 @@ html
                         margin 12px auto
                         a
                             transition all 0.6s
+        include mixin/player
+
     body(class="theme_"+Th)
         div.themeSel
             -for(var i=1;i<=ThLen;i++)
@@ -105,7 +107,9 @@ html
                 a(href="#") 关于本站
                 span &nbsp;|&nbsp;
                 a(href="#") 建议反馈
-                span &nbsp;|&nbsp;build 0.1.2
+                span=" | v"+version
             p 本站为非盈利网站，图片、视频、漫画等来源网络，相关权利归制作者所有。图片、视频、漫画等内容中涉及的包括但不限于插图、立绘图标、界面设计等的版权均归其版权所有者。感谢助屋作者あやか为我们带来的这一切。
-        script.preFile
+        +player
+        script.preFile(src='/static/lib/jquery.min.js')
+        link.preFile(rel='stylesheet',href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
         script.preFile

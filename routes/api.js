@@ -1,6 +1,7 @@
 "use strict"
 
 var router=require('koa-router')()
+    ,fs = require('co-fs')
 
 var transporter=require('nodemailer').createTransport()
 router.post('/mailer',function*(next){
@@ -18,4 +19,8 @@ router.post('/mailer',function*(next){
     yield next
 })
 
+router.get('/music',function*(next){
+    this.redirect('//shibeta.oss-cn-qingdao.aliyuncs.com/music/quick_'+Math.floor(Math.random()*10)+'.mp3')
+    yield next
+})
 module.exports=router

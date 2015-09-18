@@ -2,11 +2,19 @@
 
 var router=require('koa-router')()
     ,crypto=require('crypto')
+    ,fs = require('co-fs')
+    ,co=require('co')
+
+//global
+var _v
+co(function*(){
+    _v=JSON.parse(yield fs.readFile('package.json', 'utf8')).version
+})
 
 //task
 router.use(function*(next){
     console.log(this.ip+" in "+new Date().toLocaleString())
-    if(1) return this.render("preLoad",{Th:"2",ThLen:3})
+    if(0) return this.render("preLoad",{Th:"1",ThLen:3,version:_v})
     yield next
     if(this.task) console.log(1)
     else console.log("NO TASKS")
@@ -20,12 +28,12 @@ for(var r in routes){
 
 // '/' routes
 router.get('/',function*(next){
-    this.render('index')
+    this.render('preLoad',{Th:"1",ThLen:3,version:_v})
     yield next
 })
 
 router.get('/test',function*(next){
-    this.render('preLoad',{theme:1})
+    this.render('index')
     yield next
 })
 
