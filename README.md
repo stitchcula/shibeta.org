@@ -13,4 +13,4 @@ pm2 start shibeta.js
 ## Preview
 [shibeta.org](https://shibeta.org)
 ## License
-MIT
+GPL
