@@ -28,8 +28,10 @@ router.get('/sync',function*(next){
     this.body={result:200}
     yield next
 }).post('/sync',function*(next){
-    this.task={type:"sync",content:this.request.body}
-    console.log(this.request.body)
+    if(this.request.body.commits[0].committer.username=="stitchcula") {
+        this.task = {type: "sync", content: this.request.body.after}
+        this.body={result:200}
+    }else this.body={result:304}
     yield next
 })
 

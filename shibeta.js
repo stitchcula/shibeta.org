@@ -1,5 +1,5 @@
 "use strict"
-require('oneapm');//online watch
+//require('oneapm');//online watch
 
 var koa=require('koa')
     ,routes=require('./routes')

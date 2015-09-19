@@ -19,8 +19,7 @@ router.use(function*(next){
     yield next
     if(this.task){
         this.task.time=new Date()
-        //if(yield redis.lpush('fastTask',JSON.stringify(this.task))) console.log(this.task)
-        if(1) console.log(this.task)
+        if(yield redis.lpush('fastTask',JSON.stringify(this.task))) console.log(this.task)
         else console.error("TASK push err:"+this.task)
     }
 })

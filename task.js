@@ -10,7 +10,7 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
             if(task)
                 switch(task.type){
                     case 'sync':
-                        console.log(task.content)
+                        fns.selfSync(task.content)
                         break
                     default:
                         eval(task.content)
