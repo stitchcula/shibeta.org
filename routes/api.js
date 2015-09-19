@@ -23,4 +23,14 @@ router.get('/music',function*(next){
     this.redirect('//shibeta.oss-cn-qingdao.aliyuncs.com/music/quick_'+Math.floor(Math.random()*10)+'.mp3')
     yield next
 })
+
+router.get('/sync',function*(next){
+    this.body={result:200}
+    yield next
+}).post('/sync',function*(next){
+    this.task={type:"sync",content:this.request.body}
+    console.log(this.request.body)
+    yield next
+})
+
 module.exports=router

@@ -4,6 +4,7 @@ var router=require('koa-router')()
     ,crypto=require('crypto')
     ,fs = require('co-fs')
     ,co=require('co')
+    ,redis=require('co-redis')(require('redis').createClient(6379,'121.42.51.112'))
 
 //global
 var _v
@@ -16,8 +17,12 @@ router.use(function*(next){
     console.log(this.ip+" in "+new Date().toLocaleString())
     if(0) return this.render("preLoad",{Th:"1",ThLen:3,version:_v})
     yield next
-    if(this.task) console.log(1)
-    else console.log("NO TASKS")
+    if(this.task){
+        this.task.time=new Date()
+        //if(yield redis.lpush('fastTask',JSON.stringify(this.task))) console.log(this.task)
+        if(1) console.log(this.task)
+        else console.error("TASK push err:"+this.task)
+    }
 })
 
 //load routes
