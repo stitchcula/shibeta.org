@@ -10,8 +10,8 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
     co(function*(){
         while(1) {
             var task = JSON.parse(yield redis.rpoplpush('fastTask', 'fastTaskLog'))
-            console.log(new Date())
             if (task){
+                console.log('[fastTask in '+new Date()+']')
                 console.log(task)
                 switch (task.type) {
                     case 'sync':
@@ -22,7 +22,10 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
                     default:
                         eval(task.content)
                 }
-            }else break
+            }else{
+                console.log('[fastTask in '+new Date()+']\n\rNO\n\r')
+                break
+            }
         }
     })
 })

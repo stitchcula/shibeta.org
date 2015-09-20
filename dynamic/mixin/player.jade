@@ -9,6 +9,7 @@ style
             height 36px
             width 72px
             border-radius 0 18px 18px 0
+            transition all 0.6s
             .quick
                 position relative
                 .play
@@ -60,7 +61,6 @@ mixin player
             div.extend
                 i.fa.fa-angle-double-right
             div.progress-yet
-            div.progress-bg
         div.panel
     script.
         var audio=document.getElementsByTagName("audio")[0]
@@ -73,7 +73,7 @@ mixin player
                 document.querySelector('.player .play i').classList.remove("fa-play")
                 document.querySelector('.player .play i').classList.add("fa-pause")
                 progressMove = setInterval(function () {
-                    var progressYet = (audio.currentTime / audio.duration) * document.getElementsByClassName('progress-bg')[0].clientWidth
+                    var progressYet = (audio.currentTime / audio.duration) * document.getElementsByClassName('player')[0].clientWidth
                     document.getElementsByClassName('progress-yet')[0].style.width=progressYet+'px'
                     if(audio.currentTime==audio.duration) reloadQuick()
                 }, 1000)
@@ -84,9 +84,23 @@ mixin player
                 clearInterval(progressMove)
             }
         })
+        document.getElementsByClassName('player')[0].getElementsByClassName('extend')[0].addEventListener('click',function (e) {
+            if(!this.ifExtend){
+                document.getElementsByClassName('player')[0].style.bottom = 0
+                document.getElementsByClassName('player')[0].style.height = '164px'
+                document.getElementsByClassName('player')[0].style.width = '512px'
+                this.ifExtend=1
+            }else{
+                document.getElementsByClassName('player')[0].style.bottom = '128px'
+                document.getElementsByClassName('player')[0].style.height = '36px'
+                document.getElementsByClassName('player')[0].style.width = '72px'
+                this.ifExtend=0
+            }
+        })
 
-        function reloadQuick(){
+        function reloadQuick(src){
             audio.currentTime=0
+            if(src) audio.src=src
             audio.load()
             audio.play()
         }
