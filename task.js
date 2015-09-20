@@ -30,7 +30,7 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
     })
 })
 
-var slow=schedule.scheduleJob('* * */23 * * *',function(){
+var slow=schedule.scheduleJob('* * 3 * * *',function(){
     co(function*(){
         while(1){
             var log=yield redis.rpop('fastTaskLog')
