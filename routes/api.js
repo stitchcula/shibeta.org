@@ -6,7 +6,7 @@ var router=require('koa-router')()
 var transporter=require('nodemailer').createTransport()
 router.post('/mailer',function*(next){
     transporter.sendMail({
-        from: "HSXF <noreply@shibeta.org>",
+        from: "Shibeta <noreply@shibeta.org>",
         to: this.request.body.to,
         subject: this.request.body.subject,
         html: this.request.body.html

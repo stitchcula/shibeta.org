@@ -44,12 +44,6 @@ style
                     height 36px
                     z-index -1
                     transition all 0.1s
-                .progress-bg
-                    position absolute
-                    top 0
-                    height 36px
-                    width 54px
-                    z-index -2
 
 mixin player
     div.player
@@ -84,6 +78,7 @@ mixin player
                 clearInterval(progressMove)
             }
         })
+        /*
         document.getElementsByClassName('player')[0].getElementsByClassName('extend')[0].addEventListener('click',function (e) {
             if(!this.ifExtend){
                 document.getElementsByClassName('player')[0].style.bottom = 0
@@ -97,7 +92,7 @@ mixin player
                 this.ifExtend=0
             }
         })
-
+        */
         function reloadQuick(src){
             audio.currentTime=0
             if(src) audio.src=src

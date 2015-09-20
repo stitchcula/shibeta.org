@@ -20,6 +20,7 @@ var app=koa()
 app.proxy='nginx'
 app.keys=['stcula','toy']
 app.use(function*(next){
+    if(this.header.host!='shibeta.org') return this.redirect('https://shibeta.org')
     yield next
     if(this.status==404) this.body={result:404}//this.render('404')
 })
