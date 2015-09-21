@@ -3,6 +3,11 @@
 var router=require('koa-router')()
     ,fs = require('co-fs')
 
+router.get('/',function*(next){
+    this.render('apiList',{title:"API List"})
+    yield next
+})
+
 var transporter=require('nodemailer').createTransport()
 router.post('/mailer',function*(next){
     transporter.sendMail({

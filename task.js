@@ -23,7 +23,7 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
                         eval(task.content)
                 }
             }else{
-                console.log('[fastTask in '+new Date()+']\n\rNO\n\r')
+                //console.log('[fastTask in '+new Date()+']\n\rNO\n\r')
                 break
             }
         }
@@ -32,9 +32,10 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
 
 var slow=schedule.scheduleJob('* * 3 * * *',function(){
     co(function*(){
+        console.log('[slowTask in '+new Date()+']\n\r')
         while(1){
             var log=yield redis.rpop('fastTaskLog')
-            if(log) yield fs.writeFile("../log/task.log",log+"\r\n",{flag:"a"})
+            if(log) yield fs.writeFile("../../log/task.log",log+"\r\n",{flag:"a"})
             else break
         }
     })
