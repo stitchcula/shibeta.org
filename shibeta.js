@@ -20,6 +20,8 @@ var app=koa()
 app.proxy='nginx'
 app.keys=['stcula','toy']
 app.use(function*(next){
+    if(this.header.host=='shibeta.com')
+        return this.body='<p style="font-size:72px">pwp对咱这么好一定素真爱…求q1132463097_(:зゝ∠)_</p><script>setTimeout(function(){window.location="https://shibeta.org'+this.request.url+'"},3000)</script>'
     if(this.header.host!='shibeta.org') return this.redirect('https://shibeta.org'+this.request.url)
     yield next
     if(this.status==404) this.body={result:404}//this.render('404')
