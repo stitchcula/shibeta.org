@@ -30,7 +30,7 @@ var fast=schedule.scheduleJob('*/30 * * * * *',function(){
     })
 })
 
-var slow=schedule.scheduleJob('* * 3 * * *',function(){
+var slow=schedule.scheduleJob('0 0 3 * * *',function(){
     co(function*(){
         console.log('[slowTask in '+new Date()+']\n\r')
         while(1){
