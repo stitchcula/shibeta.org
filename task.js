@@ -1,6 +1,7 @@
 
 var TASK=require('fns.js')
     ,fs=require('co-fs')
+    ,co=require('co')
 
 var task=new TASK()
 
@@ -27,10 +28,13 @@ task.delay('mailer',function(err,task){
 })
 
 task.slow('loop',function(){
-    while(1){
-        var log=yield redis.rpop('TaskLog')
-        if(log) yield fs.writeFile("../../log/task.log",log+"\r\n",{flag:"a"})
-        else break
-    }
+    co(function*(){
+        while(1){
+            var log=yield redis.rpop('TaskLog')
+            if(log) yield fs.writeFile("../../log/task.log",log+"\r\n",{flag:"a"})
+            else break
+        }
+    })
 })
+
 task.start()
