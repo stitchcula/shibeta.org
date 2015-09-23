@@ -9,7 +9,7 @@ var koa=require('koa')
     ,stylus=require('koa-stylus')
     ,jade=require('jade')
     ,session=require('koa-session-redis')
-    //,redis=require('co-redis')(require('redis').createClient(6379,'127.0.0.1'))
+    ,redis=require('co-redis')(require('redis').createClient(6379,'121.42.51.112'))
     ,usr
 
 //co(function*(){usr=(yield require('robe').connect('127.0.0.1:7878')).collection('usr')})
@@ -20,14 +20,14 @@ var app=koa()
 app.proxy='nginx'
 app.keys=['stcula','toy']
 app.use(function*(next){
-    if(this.header.host=='shibeta.com')
-        return this.body='<p style="font-size:96px">pwp对咱这么好一定素真爱…求q1132463097_(:зゝ∠)_</p><script>setTimeout(function(){window.location="https://shibeta.org'+this.request.url+'"},3000)</script>'
-    if(this.header.host!='shibeta.org') return this.redirect('https://shibeta.org'+this.request.url)
+    //if(this.header.host=='shibeta.com')
+    //    return this.body='<p style="font-size:96px">pwp对咱这么好一定素真爱…求q1132463097_(:зゝ∠)_</p><script>setTimeout(function(){window.location="https://shibeta.org'+this.request.url+'"},3000)</script>'
+    //if(this.header.host!='shibeta.org') return this.redirect('https://shibeta.org'+this.request.url)
     yield next
     if(this.status==404) this.body={result:404}//this.render('404')
 })
 app.use(stylus('./dynamic'))
-app.use(session({store:{host:'127.0.0.1',port:6379,ttl:600}}))
+app.use(session({store:{host:'121.42.51.112',port:6379,ttl:600}}))
 app.use(body({multipart:true,formidable:{uploadDir:__dirname+'/static/upload'}}))
 app.use(serve(__dirname))
 app.use(function *(next){
