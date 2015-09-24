@@ -2,12 +2,14 @@
 var TASK=require('fns.js')
     ,fs=require('co-fs')
     ,co=require('co')
+    ,exec=require('child_process').exec
 
 var task=new TASK()
 
 task.fast('sync',function(err,task){
+    console.log(task)
     exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
-        console.log(task.content)
+        console.log(err)
     })
 })
 
@@ -25,6 +27,10 @@ task.delay('mailer',function(err,task){
             else request.post(task.content.hook,{form:{result:200,msg:rep}})
         }
     })
+})
+
+task.fast('loop',function(){
+    console.log('fastloop at '+new Date())
 })
 
 task.slow('loop',function(){
