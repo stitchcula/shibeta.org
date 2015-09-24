@@ -8,9 +8,9 @@ var task=new TASK()
 
 task.fast('sync',function(err,task){
     console.log(task)
-    exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
+    //exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
         console.log(err)
-    })
+    //})
 })
 
 var transporter=require('nodemailer').createTransport()
