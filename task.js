@@ -7,10 +7,9 @@ var TASK=require('fns.js')
 var task=new TASK()
 
 task.fast('sync',function(err,task){
-    console.log(task)
-    //exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
-        console.log(err)
-    //})
+    exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
+        console.log(stdout)
+    })
 })
 
 var transporter=require('nodemailer').createTransport()
