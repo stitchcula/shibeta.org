@@ -37,7 +37,7 @@ router.get('/',function*(next){
 })
 
 router.get('/test',function*(next){
-    this.render('index')
+    this.render('md')
     yield next
 })
 

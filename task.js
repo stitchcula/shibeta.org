@@ -28,9 +28,9 @@ task.delay('mailer',function(err,task){
     })
 })
 
-task.fast('loop',function(){
-    console.log('fastloop at '+new Date())
-})
+//task.fast('loop',function(){
+//    console.log('fastloop at '+new Date())
+//})
 
 task.slow('loop',function(){
     co(function*(){
