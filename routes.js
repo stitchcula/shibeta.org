@@ -37,7 +37,57 @@ router.get('/',function*(next){
 })
 
 router.get('/test',function*(next){
-    this.render('md')
+    this.render('md',{
+        menu:[
+            {
+                inner:"测试1",
+                icon:"arrow_back",
+                href:"#1"
+            },
+            {
+                inner:"测试5",
+                icon:"arrow_back",
+                href:"#1"
+            },
+            {
+                inner:"测试2",
+                icon:"arrow_back",
+                href:[
+                    {
+                        inner:"测试3",
+                        href:"#3",
+                        icon:"arrow_back"
+                    },
+                    {
+                        inner:"测试4",
+                        href:"#4",
+                        icon:"arrow_back"
+                    }
+                ]
+            },
+            {
+                inner:"控制面板",
+                icon:"settings",
+                href:[
+                    {
+                        inner:"用户群组",
+                        href:"#usrs",
+                        icon:"supervisor_account"
+                    },
+                    {
+                        inner:"xxx",
+                        href:"#4",
+                        icon:"arrow_back"
+                    }
+                ]
+            },
+            {
+                inner:"注销",
+                icon:"arrow_back",
+                href:"#1"
+            },
+        ]
+    })
     yield next
 })
 

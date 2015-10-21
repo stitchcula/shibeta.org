@@ -1,8 +1,102 @@
 extends frag/framework
 block scripts
-
+    title md设计测试
+    link(rel="stylesheet",href="http://fonts.googleapis.com/icon?family=Material+Icons")
+    link(rel='stylesheet',href='/static/css/materialize.min.css',media="screen,projection")
+    meta(name="viewport",content="width=device-width, initial-scale=1.0")
+    script(src='/static/lib/jquery.min.js')
+    script(src='/static/js/materialize.min.js')
+    include mixin/footer
 block style
-    title=title
+    style
+        :stylus
+            body
+                display: flex;min-height: 100vh;flex-direction: column;
+            main
+                flex: 1 0 auto
+            p.box
+                padding: 20px;
+            p
+                color: rgba(0, 0, 0, 0.71);padding: 0;-webkit-font-smoothing: antialiased;
+            h1, h2, h3, h4, h5, h6
+                -webkit-font-smoothing: antialiased
+            nav a
+                -webkit-font-smoothing: antialiased
+            nav ul li:hover, nav ul li.active
+                background-color: #ea454b;
+            header, main, footer
+                padding-left: 240px
+            .parallax-demo header, .parallax-demo main, .parallax-demo footer
+                padding-left: 0;
+            @media only screen and (max-width: 992px)
+                header, main, footer
+                    padding-left: 0;
+            ul.side-nav.fixed li a
+                line-height 44px;height 44px;line-height
+            ul.side-nav.fixed li i
+                line-height inherit;width 2rem
+            a.button-collapse.top-nav
+                position: absolute;text-align: center;height: 48px;width: 48px;left: 7.5%;top: 0;float: none;margin-left: 1.5rem;color: #fff;font-size: 32px;z-index: 2;
+            a.button-collapse.top-nav.full
+                line-height: 64px;
+            @media only screen and (max-width: 600px)
+                a.button-collapse.top-nav
+                    left: 5%;
+
 block content
-    div.musicUpload
-        input(type="file")
+    header
+        div.container
+            a.button-collapse.top-nav.full.hide-on-large-only.left(href="#",data-activates="slide-nav")
+                i.mdi-navigation-menu
+        ul#slide-nav.side-nav.fixed
+            li.logo
+            each m in menu
+                if typeof(m.href)=='string'
+                    li.bold
+                        a.waves-effect.waves-teal(href=m.href)
+                            i.material-icons.left=m.icon
+                            |#{m.inner}
+                else
+                    li.no-padding
+                        ul.collapsible.collapsible-accordion
+                            li.bold
+                                a.collapsible-header.waves-effect.waves-teal
+                                    i.material-icons.left=m.icon
+                                    |#{m.inner}
+                                div.collapsible-body
+                                    ul
+                                        each i in m.href
+                                            li
+                                                a.waves-effect.waves-teal(href=i.href)
+                                                    i.material-icons.left=i.icon
+                                                    |#{i.inner}
+        script.
+            $(function(){
+                $('.button-collapse').sideNav({
+                    menuWidth: 240,
+                    edge: 'left',
+                    closeOnClick: false
+                })
+                window.onload=ajaxHash
+                window.onhashchange=ajaxHash
+
+                function ajaxHash(){
+                    var hash=window.location.hash.substr(1)
+                    //$("main").load(window.location.pathname+hash)
+                }
+            })
+    main
+        nav.top-nav
+            div.container
+                div.nav-wrapper
+                    a.brand-logo
+                        i.material-icons.left insert_invitation
+                        |欢迎
+        div.container
+            a.waves-effect.waves-light.btn.orange 规范的撒
+            a.waves-effect.waves-red.btn-flat text1
+            p#p1 lalala
+    +footer
+
+
+
