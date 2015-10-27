@@ -36,8 +36,18 @@ router.get('/',function*(next){
     yield next
 })
 
+router.get('/about',function*(next){
+    this.render('about')
+    yield next
+})
+
 router.get('/test',function*(next){
-    this.body="test"
+    this.render('index')
+    yield next
+})
+
+router.get('/login',function*(next){
+    this.render('login',{off_footer:1})
     yield next
 })
 

@@ -2,11 +2,11 @@ extends frag/framework
 block style
     style
         :stylus
-            .test
-                margin 0
+            footer
+                display none
 block content
     main
-        div.slider
+        div.slider.fullscreen
             ul.slides
                 -var menu=[{},{},{}]
                 each m in menu

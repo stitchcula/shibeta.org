@@ -2,11 +2,11 @@
 
 var router=require('koa-router')()
 
-var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/menu',['.jade']).children
+var menu=require('directory-tree').directoryTree(__dirname+'/../dynamic/admin/tree').children
 for(var r of menu){
-    r=r.name.substring(0,r.name.lastIndexOf("."))
+    r=r.path//.substring(0,r.name.lastIndexOf("."))
     router.get('/'+r,function*(next){
-        this.render('admin/menu/'+r)
+        this.render(this.path)
         yield next
     })
 }
@@ -15,34 +15,34 @@ router.get('/',function*(next){
     this.render('admin/framework',{
         menu:[
             {
-                inner:"测试1",
-                icon:"arrow_back",
-                href:"#1"
+                inner:"通知",
+                icon:"question_answer",
+                href:"#notice"
             },
             {
-                inner:"测试5",
-                icon:"arrow_back",
-                href:"#1"
-            },
-            {
-                inner:"测试2",
-                icon:"arrow_back",
+                inner:"性能监控",
+                icon:"cloud_queue",
                 href:[
                     {
-                        inner:"测试3",
-                        href:"#3",
-                        icon:"arrow_back"
+                        inner:"总览",
+                        icon:"equalizer",
+                        href:"#3"
                     },
                     {
-                        inner:"测试4",
-                        href:"#4",
-                        icon:"arrow_back"
+                        inner:"储存",
+                        icon:"dns",
+                        href:"#4"
+                    },
+                    {
+                        inner:"交互",
+                        icon:"swap_horiz",
+                        href:"#4"
                     }
                 ]
             },
             {
                 inner:"控制面板",
-                icon:"settings",
+                icon:"tune",
                 href:[
                     {
                         inner:"用户群组",
@@ -50,9 +50,9 @@ router.get('/',function*(next){
                         icon:"supervisor_account"
                     },
                     {
-                        inner:"xxx",
-                        href:"#4",
-                        icon:"arrow_back"
+                        inner:"UI控制",
+                        href:"#ui",
+                        icon:"view_compact"
                     }
                 ]
             },
@@ -61,7 +61,9 @@ router.get('/',function*(next){
                 icon:"arrow_back",
                 href:"#1"
             },
-        ]
+        ],
+        off_footer:1,
+        title:"控制台"
     })
     yield next
 })
