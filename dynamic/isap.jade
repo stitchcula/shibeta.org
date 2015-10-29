@@ -1,0 +1,139 @@
+extends frag/framework
+block style
+    style
+        :stylus
+            footer.page-footer._off-footer
+                padding-top 0
+                >.container
+                    display none
+            footer>.ajaxLoad
+                margin 0
+                display none
+            .section.first
+                padding-top 0
+            .header
+                color #ee6e73
+                font-weight 300
+            .p-yahei
+                font-family "Microsoft YaHei"
+            .p-long
+                font-size 16px
+                text-indent 32px
+                line-height 200%
+            .row-without-bottom
+                margin-bottom 0
+            .circle-margin
+                margin 5px
+block content
+    main
+        div#introduction.section.first.scrollspy
+            div.slider
+                ul.slides
+                   each m in slides
+                        li
+                            img(src=m.img)
+                            div.caption(class=m.ext)
+                                h3=m.title
+                                h5.light.grey-text.text-lighten-3=m.html
+        div.row
+            div.col.hide-on-small-only.m2.l2
+                p
+            div.col.s12.m8.l8
+                div
+                    h2.header  Institution of Space and Astrophysics
+                    h5.p-yahei 湛江一中ISAP天文社
+                    p.p-yahei.p-long 吾等皆为星尘！自宇宙之爆以来，星移物换，至今一百三十八亿年有余矣。吾等赖以生息之物，创世之时实未有也。而后星成星灭已历数代矣，而成吾等所需之物，如碳、氧、氮之属。谓吾等皆为星尘，谬哉耶？噫！从星空中来，必时视之！故有天文之学也。然今众生者，困于利而疏于此也，以致其所出之处而不知，悲夫！故吾等立天文之社而使之为人所知也，名之曰ISAP（Institute of Space & Astrophysics）。吾等以天文科普为己任，晓公众以天文，会同好于星空，自吴、廖二位先生兴天文小组以来，已十年有奇矣。
+                div#history.section.scrollspy
+                    h2.header History of ISAP
+                    h5.p-yahei 社团历史
+                    p.p-yahei.p-long 到目前ISAP天文社已经经过五代社员更替，并组织了大量的观测活动。
+                    ul.collapsible.popout(data-collapsible="accordion")
+                        -for(var h=0;h<history.length;h++)
+                            li
+                                div.collapsible-header(class=(!h)?"active":"")
+                                    div.row.valign-wrapper.row-without-bottom
+                                        div.col.s1
+                                            img.circle.responsive-img.valign.circle-margin(src=history[h].img)
+                                        div.col.s11=history[h].title
+                                            span.right.bold=history[h].ext
+                                div.collapsible-body
+                                    div.container=history[h].html
+                div#department.section.scrollspy
+                    h2.header Introduction of Departments
+                    h5.p-yahei 分部介绍
+                    p.p-yahei.p-long 跪求文案，在线等
+                    div.row
+                        div.col.s4
+                            p.p-yahei.p-long 跪求文案，在线等
+                        div.col.s4
+                            p.p-yahei.p-long 跪求文案，在线等
+                        div.col.s4
+                            p.p-yahei.p-long 跪求文案，在线等
+                div#join.section.scrollspy
+                    h2.header Join Us
+                    h5.p-yahei 加入我们
+                    p.p-yahei.p-long 跪求文案，在线等
+            div.col.hide-on-small-only.m2.l2
+                ul.section.table-of-contents.toc-wrapper
+                    li
+                        a(href="#introduction") ISAP天文社
+                    li
+                        a(href="#history") 社团历史
+                    li
+                        a(href="#department") 分部介绍
+                    li
+                        a(href="#join") 加入我们
+    footer.page-footer(class=(off_footer)?"_off-footer":"")
+        if !off_footer
+            div.container
+                div.row
+                    div.col.l6.s12
+                        h5.white-text 求文案
+                        p.grey-text.text-lighten-4 求文案
+                    div.col.l4.offset-l2.s12
+                        h5.white-text Links
+                        ul
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat.p-yahei(href="#!") 湛江一中IT社
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat.p-yahei(href="http://www.ezsta.com/") 南昌二中STA协会
+                            li
+                                a.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat(href="https://shibeta.org") shibeta.org
+                            li
+                                a.modal-trigger.grey-text.text-lighten-3.waves-effect.waves-light.btn-flat(href="#modal_v") &nbsp; V 0.1.6 &nbsp;
+                                div#modal_v.modal.modal-fixed-footer
+                                    div.modal-content
+                                        h4 历史版本
+                                        ul.collapsible.popout(data-collapsible="accordion")
+                                            li
+                                                div.collapsible-header.active v0.1.6
+                                                div.collapsible-body
+                                                    p 更新了isap.space。
+                                            li
+                                                div.collapsible-header v0.1.5
+                                                div.collapsible-body
+                                                    p 更新了mixin。
+                                    div.modal-footer
+                                        a.modal-action.modal-close.waves-effect.waves-green.btn-flat 关闭
+                                        a.modal-action.waves-effect.waves-green.btn-flat(href="https://github.com/stitchcula/shibeta.org") 在GitHub查看
+        if off_footer
+            div.progress.ajaxLoad
+                div.indeterminate
+        div.footer-copyright
+            div.container
+                span © 2015 Copyright StitchCula.
+
+    script.
+        $(function(){
+            $('.slider').slider({full_width: true,interval:3000})
+            $('.scrollspy').scrollSpy()
+            $('.modal-trigger').leanModal()
+            $('.collapsible').collapsible({
+                accordion : false
+            })
+            if ($('.slider').length) {
+                $('.toc-wrapper').pushpin({ top: $('.slider').height() });
+            }else {
+                $('.toc-wrapper').pushpin({ top: 0 });
+            }
+        })

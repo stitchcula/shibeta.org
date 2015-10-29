@@ -16,6 +16,7 @@ html
         block style
     body
         block content
-        +footer
+        if(!without_footer)
+            +footer
 
 

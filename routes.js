@@ -51,5 +51,24 @@ router.get('/login',function*(next){
     yield next
 })
 
+router.get('/isap',function*(next){
+    this.render('isap',{
+        without_footer:1,
+        slides:[
+            {img:"/static/img/isap/m1.jpg",title:"不知道说啥",html:"prprprprprpr",ext:"center-align"},
+            {img:"/static/img/isap/m1.jpg",title:"不知道说啥",html:"prprprprprpr",ext:"left-align"},
+            {img:"/static/img/isap/m1.jpg",title:"不知道说啥",html:"prprprprprpr",ext:"right-align"}
+        ],
+        history:[
+            {img:"/static/img/isap/s1.jpg",title:"_(:зゝ∠)_不知道说啥",html:"求文案，在线等。",ext:"2010-2012"},
+            {img:"/static/img/isap/s2.jpg",title:"_(:зゝ∠)_不知道说啥",html:"求文案，在线等。",ext:"2013"},
+            {img:"/static/img/isap/s3.jpg",title:"_(:зゝ∠)_不知道说啥",html:"求文案，在线等。",ext:"2013"},
+            {img:"/static/img/isap/s4.jpg",title:"_(:зゝ∠)_不知道说啥",html:"求文案，在线等。",ext:"2014"},
+            {img:"/static/img/isap/s5.jpg",title:"_(:зゝ∠)_不知道说啥",html:"求文案，在线等。",ext:"2015"},
+        ]
+    })
+    yield next
+})
+
 module.exports=router
 
