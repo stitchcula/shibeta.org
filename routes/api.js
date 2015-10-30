@@ -10,7 +10,11 @@ router.get('/',function*(next){
 })
 
 router.get('/upload',function*(next){
-    this.render('musicUpload',{title:"上传音乐"})
+    this.render('uploadTest',{title:"上传测试"})
+    yield next
+}).post('/upload',function*(next){
+    this.body=""
+    yield next
 })
 
 router.get('/music',function*(next){

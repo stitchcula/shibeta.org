@@ -53,6 +53,7 @@ router.get('/login',function*(next){
 
 router.get('/isap',function*(next){
     this.render('isap',{
+        title:"ISAP天文社",
         without_footer:1,
         slides:[
             {img:"/static/img/isap/m1.jpg",title:"不知道说啥",html:"prprprprprpr",ext:"center-align"},
