@@ -28,13 +28,13 @@ app.use(function*(next){
 })
 app.use(stylus('./dynamic'))
 app.use(session({store:{host:'121.42.51.112',port:6379,ttl:600}}))
-app.use(body({multipart:true,formidable:{uploadDir:__dirname+'/static/upload'}}))
+app.use(body())//POST/PUT body
 app.use(serve(__dirname))
 app.use(function *(next){
     this.render=function(file,opt){return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)}
     this.usr=usr
     this.redis=redis
-    if(this.method==='POST'||this.method==='PUT') this.request.body=this.request.body.files?this.request.body:this.request.body.fields
+    if((this.method==='POST'||this.method==='PUT')&&!this.request.body.files) this.request.body=this.request.body.fields
     yield next
 })
 app.use(routes.routes())

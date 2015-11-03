@@ -1,0 +1,5 @@
+mixin upload
+    //input(type="file")
+    form(action="/api/upload",method="post",enctype ="multipart/form-data",runat="server")
+        input#File1(runat="server",name="UpLoadFile",type="file")
+        input#Button1(type="submit" name="Button1" value="Button")

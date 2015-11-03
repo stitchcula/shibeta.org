@@ -2,6 +2,7 @@
 
 var router=require('koa-router')()
     ,fs = require('co-fs')
+    ,body=require('koa-better-body')
 
 //ui api
 router.get('/',function*(next){
@@ -10,10 +11,22 @@ router.get('/',function*(next){
 })
 
 router.get('/upload',function*(next){
+    //TODO:sha1 test
     this.render('uploadTest',{title:"上传测试"})
     yield next
 }).post('/upload',function*(next){
-    this.body=""
+    //TODO:pms test
+    console.log("1")
+    yield next
+},body({
+    multipart:true,
+    formidable:{uploadDir:__dirname+'/../../static/upload'}
+}),function*(next){
+    //TODO:
+    console.log("2")
+    this.body={
+        sid:this.request.body,
+    }
     yield next
 })
 
