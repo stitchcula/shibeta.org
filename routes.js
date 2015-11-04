@@ -14,7 +14,7 @@ co(function*(){
 
 //task
 router.use(function*(next){
-    console.log(this.ip+" in "+new Date().toLocaleString())
+    console.log(this.ip+" in "+this.path+" at "+new Date().toLocaleString())
     if(0) return this.render("preLoad",{Th:"1",ThLen:3,version:_v})
     yield next
     if(this.task){
@@ -43,20 +43,6 @@ router.get('/about',function*(next){
 
 router.get('/test',function*(next){
     this.render('index')
-    yield next
-})
-
-router.get('/login',function*(next){
-    this.render('login',{
-        default_face:"/static/img/default_face.jpg",
-        title_img:"/static/img/login_title_img.jpg",
-        off_footer:1,
-        slides:[
-            {img:"/static/img/bg1.jpg"},
-            {img:"/static/img/bg2.jpg"},
-            {img:"/static/img/bg3.jpg"}
-        ]
-    })
     yield next
 })
 

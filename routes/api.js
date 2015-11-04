@@ -30,6 +30,14 @@ router.get('/upload',function*(next){
     yield next
 })
 
+router.get('/sms',function*(next){
+    this.body={}
+    yield next
+}).post('/sms',function*(next){
+    this.body={}
+    yield next
+})
+
 router.get('/music',function*(next){
     this.redirect('//shibeta.oss-cn-qingdao.aliyuncs.com/music/quick_'+Math.floor(Math.random()*10)+'.mp3')
     yield next
