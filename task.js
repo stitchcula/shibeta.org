@@ -1,10 +1,10 @@
 
-var TASK=require('fns.js')
+var Task=require('Task.js')
     ,fs=require('co-fs')
     ,co=require('co')
     ,exec=require('child_process').exec
 
-var task=new TASK()
+var task=new Task()
 
 task.fast('sync',function(err,task){
     exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){

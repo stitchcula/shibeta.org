@@ -9,6 +9,7 @@ router.get('/test',function*(next){
 
 router.get('/login',function*(next){
     this.render('login',{
+        title:"登陆",
         default_face:"/static/img/default_face.jpg",
         title_img:"/static/img/login_title_img.jpg",
         off_footer:1,
@@ -19,6 +20,14 @@ router.get('/login',function*(next){
         ]
     })
     yield next
+}).post('/login',function*(next){
+
+    yield next
 })
 
 module.exports=router
+
+//fns
+class Usr{
+
+}

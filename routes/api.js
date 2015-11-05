@@ -3,6 +3,7 @@
 var router=require('koa-router')()
     ,fs = require('co-fs')
     ,body=require('koa-better-body')
+    ,co=require('co')
 
 //ui api
 router.get('/',function*(next){
@@ -30,11 +31,16 @@ router.get('/upload',function*(next){
     yield next
 })
 
+var Sms=require('Sms.js')
 router.get('/sms',function*(next){
-    this.body={}
+    var sms = new Sms("login", this.query.to)
+    if(this.ip=="175.8.23.155"&&sms){
+        var res=yield sms.send()
+        this.body={result:res.body}
+    }else this.body={result:403}
     yield next
 }).post('/sms',function*(next){
-    this.body={}
+    this.body=this.request.body
     yield next
 })
 
@@ -66,7 +72,7 @@ router.get('/sync',function*(next){
     if(this.request.body.commits[0].committer.username=="stitchcula") {
         this.task = {type: "sync",flag:"fast", content: this.request.body.after}
         this.body={result:200}
-    }else this.body={result:304}
+    }else this.body={result:403}
     yield next
 })
 
