@@ -1,6 +1,6 @@
 
-var Task=require('Task.js')
-    ,Gulp=require('Gulp.js')
+var Task=require('cTask.js')
+    ,Gulp=require('cGulp.js')
     ,fs=require('co-fs')
     ,co=require('co')
     ,exec=require('child_process').exec
@@ -8,8 +8,8 @@ var Task=require('Task.js')
 var task=new Task()
 
 task.init(function(){
-    //var gulp=new Gulp()
-    //gulp.start()
+    var gulp=new Gulp()
+    gulp.start()
 })
 
 task.fast('sync',function(err,task){

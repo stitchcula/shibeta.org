@@ -31,7 +31,7 @@ router.get('/upload',function*(next){
     yield next
 })
 
-var Sms=require('Sms.js')
+var Sms=require('cSms.js')
 router.get('/sms',function*(next){
     var sms = new Sms("login", this.query.to)
     if(this.ip=="175.8.23.155"&&sms){
