@@ -1,10 +1,16 @@
 
 var Task=require('Task.js')
+    ,Gulp=require('Gulp.js')
     ,fs=require('co-fs')
     ,co=require('co')
     ,exec=require('child_process').exec
 
 var task=new Task()
+
+task.init(function(){
+    //var gulp=new Gulp()
+    //gulp.start()
+})
 
 task.fast('sync',function(err,task){
     exec('/ext/shibeta/sync.sh',{cwd:'/ext/shibeta/'},function(err,stdout,stderr){
