@@ -8,6 +8,7 @@
     "co-fs": "^1.2.0",
     "co-redis": "^2.0.0",
     "co-request": "^1.0.0",
+    "colors": "^1.1.2",
     "dir-requirer": "^1.0.4",
     "directory-tree": "^0.1.1",
     "gulp": "^3.9.0",

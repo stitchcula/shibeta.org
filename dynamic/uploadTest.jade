@@ -4,10 +4,11 @@ block style
     script(src='/static/lib/class.js')
     style
         :stylus
-            .test
-                margin 0
+            .yahei
+                font-family "Microsoft YaHei"
     include mixin/upload
 
 block content
     main
+        a.waves-effect.waves-light.btn.modal-trigger.yahei(href="#upload") 上传
         +upload
