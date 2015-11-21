@@ -10,9 +10,9 @@ var koa=require('koa')
     ,jade=require('jade')
     ,session=require('koa-session-redis')
     ,redis=require('co-redis')(require('redis').createClient(6379,'121.42.51.112'))
-    ,usr
+    ,db
 
-co(function*(){usr=(yield require('robe').connect('121.42.51.112:7878')).collection('usr')})
+co(function*(){db=(yield require('robe').connect('121.42.51.112:7878'))})
 //var hKill=setInterval(function(){require('nodegrass').get("http://localhost:9615/",function(data){if(JSON.parse(data).processes[1].monit.memory>120*1024*1024) require('child_process').spawn('pm2',['restart','all'])})},600000)
 
 var app=koa()
@@ -28,11 +28,11 @@ app.use(function*(next){
 })
 app.use(stylus('./dynamic'))
 app.use(session({store:{host:'121.42.51.112',port:6379,ttl:600}}))
-app.use(body())//POST/PUT body
+app.use(body())//POST&PUT body
 app.use(serve(__dirname))
 app.use(function *(next){
     this.render=function(file,opt){return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)}
-    this.usr=usr
+    this.db=db
     this.redis=redis
     if((this.method==='POST'||this.method==='PUT')&&!this.request.body.files) this.request.body=this.request.body.fields
     yield next

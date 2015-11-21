@@ -14,7 +14,7 @@ co(function*(){
 
 //task
 router.use(function*(next){
-    console.log(this.ip+" in "+this.path+" at "+new Date().toLocaleString())
+    console.log(this.ip+" "+this.method+" "+this.path+" at "+new Date().toLocaleString())
     if(0) return this.render("preLoad",{Th:"1",ThLen:3,version:_v})
     yield next
     if(this.task){

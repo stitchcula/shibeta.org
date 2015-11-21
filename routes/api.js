@@ -76,4 +76,12 @@ router.get('/sync',function*(next){
     yield next
 })
 
+var Local=require('cLocal.js')
+router.get('/test',function*(next){
+    var res=yield new Local(this.query.s,this)
+    console.log(res)
+    this.body=JSON.stringify(res)
+    yield next
+})
+
 module.exports=router
