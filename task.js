@@ -1,6 +1,6 @@
 
-var Task=require('cTask.js')
-    ,Gulp=require('cGulp.js')
+var Task=require('lib/cTask.js')
+    ,Gulp=require('lib/cGulp.js')
     ,fs=require('co-fs')
     ,co=require('co')
     ,exec=require('child_process').exec

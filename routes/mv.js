@@ -15,7 +15,7 @@ router.get('/:code',function*(next){
                 this.render("video", {
                     title:"数码宝贝Tri Part 2",
                     without_footer: 1,
-                    src:"https://shibeta-f.oss-cn-shenzhen.aliyuncs.com/tri/DaTri0102.mp4",
+                    src:"/static/upload/DaTri0102.mp4",
                     part:["1","3","4"],
                     next:"3"
                 })
