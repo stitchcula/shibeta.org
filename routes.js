@@ -4,7 +4,6 @@ var router=require('koa-router')()
     ,crypto=require('crypto')
     ,fs = require('co-fs')
     ,co=require('co')
-    ,redis=require('co-redis')(require('redis').createClient(6379,'121.42.51.112'))
 
 //global
 var _v
@@ -19,7 +18,7 @@ router.use(function*(next){
     yield next
     if(this.task){
         this.task.time=new Date()
-        if(yield redis.lpush(this.task.flag+'Task',JSON.stringify(this.task))) console.log(this.task)
+        if(yield this.redis.lpush(this.task.flag+'Task',JSON.stringify(this.task))) console.log(this.task)
         else console.error("TASK push err:"+this.task)
     }
 })

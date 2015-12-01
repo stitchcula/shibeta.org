@@ -31,7 +31,7 @@ router.get('/upload',function*(next){
     yield next
 })
 
-var Sms=require('lib/cSms.js')
+var Sms=require('../lib/cSms.js')
 router.get('/sms',function*(next){
     var sms = new Sms("login", this.query.to)
     if(this.ip=="175.8.23.155"&&sms){
@@ -76,7 +76,7 @@ router.get('/sync',function*(next){
     yield next
 })
 
-var Local=require('lib/cLocal.js')
+var Local=require('../lib/cLocal.js')
 router.get('/local',function*(next){
     var res=yield new Local(this.query.s,this)
     console.log(res)

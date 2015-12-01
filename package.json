@@ -23,6 +23,7 @@
     "jade": "^1.11.0",
     "koa": "^1.1.2",
     "koa-better-body": "^1.0.17",
+    "koa-mongo": "^0.4.1",
     "koa-router": "^5.2.3",
     "koa-session-redis": "^1.1.0",
     "koa-static": "^1.5.2",
