@@ -10,7 +10,7 @@ var koa=require('koa')
     ,jade=require('jade')
     ,session=require('koa-session-redis')
     ,mongo=require('koa-mongo')
-    ,redis=require('co-redis')(function(){var _=require('redis').createClient(process.env.REDIS_PORT,process.env.REDIS_HOST);_.auth(process.env.REDIS_AUTH);return _})
+    ,redis=require('co-redis')((function(){var _=require('redis').createClient(process.env.REDIS_PORT,process.env.REDIS_HOST);_.auth(process.env.REDIS_AUTH);return _})())
     ,Usr=require('./lib/cUsr.js')
 
 var app=koa()
