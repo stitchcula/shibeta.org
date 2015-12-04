@@ -33,8 +33,8 @@ app.use(function *(next){
     this.render=function(file,opt){return this.body=jade.renderFile(__dirname+'/dynamic/'+file+'.jade',opt,undefined)}
     this.db=this.mongo.db('shibeta')
     this.redis=redis
-    console.log(this.redis)
     this.usr=new Usr(this)
+    if(!this.session.uin) this.session=this.usr.baseUsrMsg
     if((this.method==='POST'||this.method==='PUT')&&!this.request.body.files) this.request.body=this.request.body.fields
     yield next
 })

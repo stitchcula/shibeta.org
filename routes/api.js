@@ -85,7 +85,7 @@ router.get('/local',function*(next){
 })
 
 router.get('/test',function*(next){
-    this.body="gfds"
+    this.body="gfsd"
     yield next
 })
 

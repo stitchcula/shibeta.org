@@ -4,6 +4,7 @@
   "description": "a website designed for 助け屋SHIBETA.",
   "main": "shibeta.js",
   "dependencies": {
+    "babel-preset-es2015": "^6.1.18",
     "co": "^4.6.0",
     "co-fs": "^1.2.0",
     "co-redis": "^2.0.0",
