@@ -11,7 +11,7 @@ var koa=require('koa')
     ,session=require('koa-session-redis')
     ,mongo=require('koa-mongo')
     ,redis=require('co-redis')((function(){var _=require('redis').createClient(process.env.REDIS_PORT,process.env.REDIS_HOST);_.auth(process.env.REDIS_AUTH);return _})())
-    ,Usr=require('./lib/cUsrG.js')
+    ,Usr=require('./lib/cUsr.js')
 
 var app=koa()
 
@@ -37,6 +37,7 @@ app.use(function *(next){
     yield this.usr.initUsr()
     if((this.method==='POST'||this.method==='PUT')&&!this.request.body.files) this.request.body=this.request.body.fields
     yield next
+    yield this.usr.saveUsr()
 })
 app.use(routes.routes())
 app.use(routes.allowedMethods())

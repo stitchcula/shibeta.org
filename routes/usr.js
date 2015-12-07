@@ -18,6 +18,13 @@ router.get('/login',function*(next){
 }).post('/login',function*(next){//登陆自己
     this.body=yield this.usr.login()
     yield next
+}).post('/auth',function*(next){//鉴权
+    this.body=yield this.usr.auth(this.request.body.pwd)
+    yield next
+}).get('/forget',function*(next){
+    yield next
+}).post('/forget',function*(next){
+    yield next
 })
 
 router.get('/sign',function*(next){//获取注册页面
@@ -28,7 +35,8 @@ router.get('/sign',function*(next){//获取注册页面
 }).post('/sign',function*(next){//注册
     this.body=yield this.usr.sign()
     yield next
-}).get('/sign/sms',function*(next){//获取短信验证码
+})
+    /*.get('/sign/sms',function*(next){//获取短信验证码
     this.body=yield this.usr.sendSms('sign')
     yield next
 }).post('/sign/sms',function*(next){//校验短信验证码
@@ -40,7 +48,7 @@ router.get('/sign',function*(next){//获取注册页面
 }).post('/sign/vfc',function*(next){//校验验证码
     this.body=yield this.usr.testVfc()
     yield next
-})
+})*/
 
 router.get('/',function*(next){//获取个人主页
     //this.render()
@@ -51,10 +59,10 @@ router.get('/',function*(next){//获取个人主页
     this.body="ok"
     yield next
 }).post('/',function*(next){//修改个人信息
-    this.body=yield this.usr.set(this.request.body)
+    this.body=yield this.usr.setUsrMsg(this.request.body)
     yield next
 }).post('/dashboard',function*(next){//新建作品
-    this.body=yield this.usr.set(this.request.body)
+    this.body="ok"
     yield next
 }).put('/dashboard',function*(next){//修改作品
     this.body="ok"
@@ -72,24 +80,6 @@ router.get('/:uin',function*(next){//用户公共主页
     yield next
 }).post('/:uin',function*(next){//关注对方、等。
 
-    yield next
-})
-
-
-class x{
-    constructor(){
-
-    }
-    *xx(next){
-        this.body=this.usr.usrMsg
-        this.lalala="2234"
-        yield next
-    }
-}
-var X=new x()
-
-router.get('/test',X.xx,function*(next){
-    this.body=this.usr.usrMsg
     yield next
 })
 
