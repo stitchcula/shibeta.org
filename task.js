@@ -18,11 +18,18 @@ task.fast('sync',function(err,task){
     })
 })
 
-var transporter=require('nodemailer').createTransport()
+var transporter=require('nodemailer').createTransport({
+        host:"smtp.mxhichina.com",
+        port:25,
+        auth:{
+            user:process.env.MAILER_USER,
+            pass:process.env.MAILER_PASS
+        }
+    })
     ,request=require('request')
 task.delay('mailer',function(err,task){
     transporter.sendMail({
-        from: "Shibeta <noreply@shibeta.org>",
+        from:(task.content.from||"shibeta")+"<"+process.env.MAILER_USER+">",
         to: task.content.to,
         subject: task.content.subject,
         html: task.content.html
