@@ -63,13 +63,7 @@ router.get('/',function*(next){//获取个人主页
     this.body="ok"
     yield next
 }).del('/',function*(next){//注销
-    //this.render()
-    this.body="ok"
-    yield next
-})
-
-router.get('/test',function*(next){
-    this.body=yield this.usr.randomUin()
+    this.body=yield this.usr.logout()
     yield next
 })
 
@@ -81,20 +75,22 @@ router.get('/:uin',function*(next){//用户公共主页
     yield next
 })
 
-var ifSign=function*(next){}
-var testUsrMsg=function*(next){}
-var setUsrMsg=function*(next){}
-var setSession=function*(next){}
-var code2msg=function*(next){}
-var getUin=function*(next){}
 
-router.get('/test'
-    ,code2msg(next)
-    ,ifSign(next)
-    ,getUin(next)
-    ,testUsrMsg(next)
-    ,setUsrMsg(next)
-    ,setSession(next)
-)
+class x{
+    constructor(){
+
+    }
+    *xx(next){
+        this.body="gfdsgds"
+        this.lalala="2234"
+        yield next
+    }
+}
+var X=new x()
+
+router.get('/test',X.xx,function*(next){
+
+    yield next
+})
 
 module.exports=router

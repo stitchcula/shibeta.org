@@ -18,9 +18,10 @@ router.use(function*(next){
     yield next
     if(this.task){
         this.task.time=new Date()
-        if(yield this.redis.lpush(this.task.flag+'Task',JSON.stringify(this.task))) console.log(this.task)
+        if(yield this.redis.lpush(this.task.flag+'Task',JSON.stringify(this.task))) console.log("TASK pushed:"+this.task.type)
         else console.error("TASK push err:"+this.task)
     }
+    //push redis to mongo
 })
 
 //load routes

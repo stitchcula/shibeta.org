@@ -42,7 +42,7 @@ task.slow('loop',function(){
     co(function*(){
         while(1){
             var log=yield redis.rpop('TaskLog')
-            if(log) yield fs.writeFile("../../log/task.log",log+"\r\n",{flag:"a"})
+            if(log) yield fs.writeFile("../static/task.log",log+"\r\n",{flag:"a"})
             else break
         }
     })
