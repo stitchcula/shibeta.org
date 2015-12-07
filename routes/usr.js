@@ -81,7 +81,7 @@ class x{
 
     }
     *xx(next){
-        this.body="gfdsgds"
+        this.body=this.usr.usrMsg
         this.lalala="2234"
         yield next
     }
@@ -89,7 +89,7 @@ class x{
 var X=new x()
 
 router.get('/test',X.xx,function*(next){
-
+    this.body=this.usr.usrMsg
     yield next
 })
 

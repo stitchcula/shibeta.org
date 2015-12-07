@@ -34,6 +34,7 @@ app.use(function *(next){
     this.db=this.mongo.db('shibeta')
     this.redis=redis
     this.usr=new Usr(this)
+    yield this.usr.initUsr()
     if((this.method==='POST'||this.method==='PUT')&&!this.request.body.files) this.request.body=this.request.body.fields
     yield next
 })
