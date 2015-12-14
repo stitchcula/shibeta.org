@@ -4,6 +4,8 @@ block style
         :stylus
             p.box
                 padding: 20px;
+            .yahei
+                font-family "Microsoft YaHei"
             p
                 color: rgba(0, 0, 0, 0.71);padding: 0;-webkit-font-smoothing: antialiased;
             h1, h2, h3, h4, h5, h6
@@ -45,21 +47,21 @@ block content
             each m in menu
                 if typeof(m.href) == 'string'
                     li.bold._active
-                        a.waves-effect.waves-right(href=m.href)
+                        a.waves-effect.waves-right.yahei(href=m.href)
                             i.material-icons.left=m.icon
                             | #{m.inner}
                 else
                     li.no-padding
                         ul.collapsible.collapsible-accordion
                             li.bold
-                                a.collapsible-header.waves-effect.waves-right
+                                a.collapsible-header.waves-effect.waves-right.yahei
                                     i.material-icons.left=m.icon
                                     | #{m.inner}
                                 div.collapsible-body
                                     ul
                                         each i in m.href
                                             li._active
-                                                a.waves-effect.waves-right(href=i.href)
+                                                a.waves-effect.waves-right.yahei(href=i.href)
                                                     i.material-icons.left=i.icon
                                                     | #{i.inner}
         script.
@@ -98,19 +100,23 @@ block content
                     ajaxLoad("main",path + "/" + hash)
                 }
                 function ajaxLoad(selector,path){
-                    $.ajax({url:path,type:"GET",cache:false,
+                    ajax(path,'GET',function(err,res){
+                        if (err != undefined)
+                            data = '<a href="/api/error">ERROR:' + err + '</a>'
+                        $(selector).fadeOut(200,function(){
+                            $(this).empty().append(res).fadeIn(200)
+                        })
+                    })
+                }
+                function ajax(path,method,data,callback){
+                    if(!callback) callback=data
+                    $.ajax({url:path,type:method,cache:false,data:data,
                         beforeSend:function(){
                             $("footer>.ajaxLoad").fadeIn(200)
                         },
                         complete:function(data){
                             $("footer>.ajaxLoad").fadeOut(200)
-                            if(data.status!=200)
-                                data = '<a href="/api/error">ERROR:TIMEOUT</a>'
-                            else if (data.responseText.result != undefined)
-                                data = '<a href="/api/error">ERROR:' + data.responseText.result + '</a>'
-                            $(selector).fadeOut(200,function(){
-                                $(this).empty().append(data.responseText).fadeIn(200)
-                            })
+                            callback(data.responseText.code,data.responseText)
                         }
                     })
                 }

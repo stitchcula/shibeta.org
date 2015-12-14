@@ -1,0 +1,10 @@
+{
+  "/usr/login": {
+    "entry": "034323_1450115310756.js",
+    "jade": {
+      "title": "Shibeta Login Entry",
+      "title_img": "/static/img/login_title_img.jpg",
+      "off_footer": "1"
+    }
+  }
+}

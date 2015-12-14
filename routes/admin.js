@@ -68,4 +68,43 @@ router.get('/',function*(next){
     yield next
 })
 
+router.post('/ui/page',function*(next){
+    var config=require("../src/shibeta.json")
+    console.log(config)
+    var fs=require("fs")
+    if(config[this.request.body.url]) return this.body={result:595}
+    var filename=require('crypto').createHmac('sha1',this.request.body.url).digest('hex').substr(0,6)+"_"+new Date().getTime()
+    console.log(filename)
+    fs.writeFile("./src/js/"+filename+".js",
+        "require('../stylus/"+filename+".styl')\n" +
+        "var js=require('jquery')\n" +
+        "require('angular')\n",
+        function(err){
+            console.log(err)
+        }
+    )
+    fs.writeFile("./src/stylus/"+filename+".styl",
+        "."+filename+"\n",
+        function(err){
+            console.log(err)
+        }
+    )
+    fs.writeFile("./src/jade/"+filename+".jade",
+        "extends frag/framework\n"+
+        "block style\n"+
+        "\tstyle\n"+
+        "\t\t:stylus\n"+
+        "\t\t\t.test\n"+
+        "\t\t\t\tmargin 0\n"+
+        "block content\n"+
+        "\tmain\n",
+        function(err){
+            console.log(err)
+        }
+    )
+    config[this.request.body.url]={entry:filename+".js",jade:this.request.body.jade}
+    fs.writeFile("./src/shibeta.json",JSON.stringify(config),function(err){if(err)console.log(err)})
+    yield next
+})
+
 module.exports=router
