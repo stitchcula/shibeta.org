@@ -33,14 +33,14 @@ router.get('/upload',function*(next){
 
 var Sms=require('../lib/cSms.js')
 router.get('/sms',function*(next){
-    var sms = new Sms("login", this.query.to)
-    if(this.ip=="175.8.23.155"&&sms){
-        var res=yield sms.send()
-        this.body={result:res.body}
-    }else this.body={result:403}
+    this.body=this.request.body
     yield next
 }).post('/sms',function*(next){
-    this.body=this.request.body
+    var sms = new Sms()
+    if((this.ip=="121.40.249.9"||this.ip=="175.8.23.155")&&sms){
+        var res=yield sms.send(this.request.body.to, this.request.body.type,this.request.body.param)
+        this.body={result:res.body}
+    }else this.body={result:403}
     yield next
 })
 
@@ -55,6 +55,7 @@ router.post('/mailer',function*(next){
         type: "mailer",
         flag: "delay",
         content: {
+            from:this.request.body.from,
             to: this.request.body.to,
             subject: this.request.body.subject,
             html: this.request.body.html,
