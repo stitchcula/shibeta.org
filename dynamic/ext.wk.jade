@@ -38,7 +38,7 @@ block content
                                 div.col.s12.m6.l6
                                     a.btn.waves-effect.waves-light.yahei.red.right#steady_clean 清空
                         div.col.l6.m12.s12.canvas-container#steady_result
-                            p.yahei.red-text 温度(Tg)随缝深(y)变化的曲线：
+                            p.yahei.red-text 温度(Tg:K)随缝深(y:cm)变化的曲线：
                             canvas#steady_result_canvas
                             img.responsive-img.materialboxed#steady_result_img.hide
                 div#unsteady.col.s12.canvas-input
@@ -59,12 +59,20 @@ block content
                                 div.col.s12.m6.l6
                                     a.btn.waves-effect.waves-light.yahei.red.right#unsteady_clean 清空
                         div.col.l6.m12.s12.canvas-container#unsteady_result
-                            p.yahei.red-text 温度(Tg)随缝深(y)与时间(t)变化的曲线：
+                            p.yahei.red-text 温度(Tg:K)随缝深(y:cm)与时间(t:s)变化的曲线：
                             canvas#unsteady_result_canvas.hide
                             img.responsive-img.materialboxed#unsteady_result_img
+                            br
+                            div.row
+                                div.col.s4
+                                    p.black-text.text-lighten-4.yahei 缝深y：
+                                div.col.s4
+                                    p.black-text.text-lighten-4.yahei 时间t：
+                                div.col.s4
+                                    p.black-text.text-lighten-4.yahei 温度Tg：
                 div#about.col.s12
                     h4.yahei 关于该计算平台
-                    p.yahei _(:зゝ∠)_我也不知道说什么好
+                    p.yahei _(:зゝ∠)_这是一个很流比的东东~
 
 
     script.
@@ -84,7 +92,7 @@ block content
             $('#steady_clean').click(function(){
                 $('#steady_result').fadeOut(300)
                 var p = document.querySelectorAll("#steady input")
-                for (i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
+                for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
             })
 
             $('#unsteady_run').click(function(){
@@ -97,13 +105,13 @@ block content
             $('#unsteady_clean').click(function(){
                 $('#unsteady_result').fadeOut(300)
                 var p = document.querySelectorAll("#unsteady input")
-                for (i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
+                for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
             })
 
             //canvas init
             var cSteady={id:"#steady_result_canvas",img:"#steady_result_img",x:0,y:0,points:[],max:{},offsetX:60,offsetY:20}//画布域
                 ,cUnsteady={id:"#unsteady_result_canvas",img:"#unsteady_result_img",x:0,y:0,points:[],max:{},offsetX:240,offsetY:40,MaxT:2000}
-            var offsetX=60,offsetY=20
+            var offsetX=60,offsetY=20//兼容保留
 
             //fSteady(360,3.6)
             /*******************functions*********************/
@@ -145,6 +153,7 @@ block content
                 }
                 if(p.id=="#unsteady_result_canvas") {
                     ctx.lineWidth = 1
+                    var time4=new Date()
                     for(var j=0;j<p.points.length; j++){//p.points.length
                         ctx.strokeStyle=p.points[j].z
                         ctx.beginPath()
@@ -152,6 +161,7 @@ block content
                         ctx.lineTo(p.points[j].x+0.5, p.points[j].y-0.5)
                         ctx.stroke()
                     }
+                    console.log("paint:"+(new Date() - time4) / 1000)
                 }
                 CanvasPaintCoo(p)
 
@@ -185,20 +195,38 @@ block content
                     ctx.fillText(parseFloat(p.points[p.points.length - 16].Wy).toFixed(1), parseInt(p.points[p.points.length - 16].x - 15 / 2) - 15.5, p.y - 1.5)
                 }
                 if(p.id=="#unsteady_result_canvas") {
-                    ctx.lineWidth=2
+                    ctx.lineWidth=1
 
                     ctx.beginPath()
-                    ctx.strokeStyle = color[0] || '#4CAF50'
+                    ctx.strokeStyle = color[0] || '#FFFFFF'
                     ctx.font = "32px Courier New"
                     ctx.fillStyle = color[1] || "#9e9e9e"
-
+                    //坐标轴
                     var detaY=(p.y-p.offsetY)/8
-                    for(var i=0;i<8;i++){
+                    var detaZ=(p.max.Tg-273)/8//???
+                    for(var i=0;i<=8;i++){
                         ctx.moveTo(p.offsetX+0.5,i*detaY+0.5)
                         ctx.lineTo(p.x+0.5,i*detaY+0.5)
-                        ctx.fillText((0.8-0.1*i).toFixed(1),p.offsetX-72,i*detaY+20.5)
+                        ctx.fillText((80-10*i).toFixed(0),p.offsetX-72,i*detaY+20.5)
+                        ctx.fillText((p.max.Tg-detaZ*i).toFixed(0),0.5,i*detaY+20.5)
+                    }
+                    var detaX_ = parseInt(p.MaxT / 200)
+                        ,detaX = (p.x - p.offsetX) / detaX_
+                    for(var j=1;j<detaX_;j++){
+                        ctx.moveTo(j*detaX-1.5+p.offsetX,0.5)
+                        ctx.lineTo(j*detaX-1.5+p.offsetX,p.y-p.offsetY)
+                        ctx.fillText((200*j).toFixed(0),j*detaX-32.5+p.offsetX,p.y-offsetY+10.5)
                     }
                     ctx.stroke()
+                    //渐变指示
+                    var linear=ctx.createLinearGradient(96.5,0.5,96.5,p.y-p.offsetY-0.5)
+                    linear.addColorStop(0,'rgba(255,0,0,1)')
+                    linear.addColorStop(0.25,'rgba(255,255,0,1)')
+                    linear.addColorStop(0.5,'rgba(0,255,0,1)')
+                    linear.addColorStop(0.75,'rgba(0,255,255,1)')
+                    linear.addColorStop(1,'rgba(0,0,255,1)')
+                    ctx.fillStyle=linear
+                    ctx.fillRect(96.5 , 0.5,48,p.y-p.offsetY-0.5)
                 }
                 //
                 ctx.beginPath()
@@ -229,7 +257,7 @@ block content
                 var Tc = fTc(w)
                 if(typeof(p)!="object") return fTg(Lg,Tc,Tf,w,p)//返回确定y时Tg的值
 
-                var max=fGetMax(0.001,Lg,Tc,Tf,w)
+                var max=fGetMax(0.00001,Lg,Tc,Tf,w)
                 var detaX=max.x/p.x
 
                 p.points=[]
@@ -259,16 +287,17 @@ block content
 
                 //p.MaxT=2000//时间范围
                 detaX=p.MaxT/(p.x-p.offsetX)
-                detaY=0.8/(p.y-p.offsetY)
+                detaY=80/(p.y-p.offsetY)//0.8m
 
                 //优化的快速算法
-
+                var time1=new Date()
                 p.points=new Array((p.x-p.offsetX)*(p.y-p.offsetY))
                 for(var ix=0.5;ix<=p.x-p.offsetX;ix=ix+1)
                     for(var iy=0.5;iy<=p.y-p.offsetY;iy=iy+1){
                         var Tg=fUnTg(Lg,Tc,Tf,w,(iy-0.5)*detaY,(ix-0.5)*detaX)
                         p.points[(ix-0.5)*(p.y-p.offsetY)+iy-0.5]={x:p.offsetX+ix,y:p.y-p.offsetY-iy,Tg:Tg,t:((ix-0.5)*detaX).toFixed(1),Wy:((iy-0.5)*detaY).toFixed(1)}
                     }
+                console.log((new Date()-time1)/1000)
                 /*
                 p.points=[]
                 for(var ix=0.5;ix<=p.x-p.offsetX;ix=ix+1)
@@ -277,23 +306,43 @@ block content
                         p.points.push({x:p.offsetX+ix,y:p.y-p.offsetY-iy,Tg:Tg,t:((ix-0.5)*detaX).toFixed(1),Wy:((iy-0.5)*detaY).toFixed(1)})
                     }
                     */
+                var time2=new Date()
                 //find the max point,奇怪的js垃圾算法
                 p.max = {x: 0, y: 0,z:0 ,Tg: 0}
+                /*
                 for(var j=0;j<p.points.length;j++){
                     p.max.Tg=Math.max(p.points[j].Tg,p.max.Tg)
                 }
-
-                var scaleZ=510/p.max.Tg
+                */
+                p.max.Tg=Tf+273//???
+                console.log((new Date()-time2)/1000)
+                var time3=new Date()
+                var scaleZ=1020/(p.max.Tg-273)//???
                 for(var k=0;k<p.points.length;k++){
-                    if(p.points[k].Tg==p.max.Tg) p.max=p.points[k]
-                    var r=Math.round(p.points[k].Tg*scaleZ)
-                        ,g=255
-                    if(r>255){
-                        g=510-r
+                    if(p.points[k].Tg==p.max.Tg)
+                        p.max=p.points[k]
+                    var g=Math.round((p.points[k].Tg-273)*scaleZ)//???
+                        ,b=255
+                        ,r=0
+                    if(g>765){
                         r=255
+                        g=(g>1020)?0:(255-(g-765))
+                        b=0
                     }
-                    p.points[k].z='rgba('+r+','+g+',0,1)'
+                    if(g>510&&g<=765){
+                        r=g-510
+                        g=255
+                        b=0
+                    }
+                    if(g>255&&g<=510){
+                        b=255-(g-255)
+                        g=255
+                        r=0
+                    }
+                    p.points[k].z='rgba('+r+','+g+','+b+',1)'
                 }
+                console.log((new Date()-time3)/1000)
+
                 return p.points
             }
 
@@ -356,9 +405,9 @@ block content
                 if(w>1.5) kn=1
                 if(w>=1) kn=0
                 else return -1
-                var km=parseInt(y/0.04)
-                var K21=k[kn][km]+(k[kn][km+1]-k[kn][km])/0.04*(y-km*0.04)
-                var K22=k[kn+1][km]+(k[kn+1][km+1]-k[kn+1][km])/0.04*(y-km*0.04)
+                var km=parseInt(y/4)
+                var K21=k[kn][km]+(k[kn][km+1]-k[kn][km])/4*(y-km*4)
+                var K22=k[kn+1][km]+(k[kn+1][km+1]-k[kn+1][km])/4*(y-km*4)
                 var K2=K21+(K22-K21)/detaKn[kn]*(w-LKn[kn])
                 return K2
             }
