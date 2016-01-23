@@ -10,6 +10,9 @@ block style
                 display none
             #unsteady_result_input
                 margin-top 40px
+            #about
+                p
+                    text-indent 30px
             .row
                 .row
                     margin-bottom 0
@@ -38,14 +41,14 @@ block content
                                     input.validate.yahei(type="text",placeholder="单位:°C.")
                                     label.yahei 火源温度Tf
                                 div.input-field.col.s12
-                                    input.validate.yahei(type="text",placeholder="大于1且不大于4,单位:cm.")
+                                    input.validate.yahei(type="text",placeholder="不小于1且不大于4,单位:cm.")
                                     label.yahei 混凝土板缝宽
                                 div.col.s12.m6.l6
                                     a.btn.waves-effect.yahei.right#steady_run 计算
                                 div.col.s12.m6.l6
                                     a.btn.waves-effect.waves-light.yahei.red.right#steady_clean 清空
                         div.col.l7.m12.s12.canvas-container#steady_result
-                            p.yahei.red-text 温度(Tg:K)随缝深(y:cm)变化的曲线：
+                            p.yahei.red-text 温度(Tg:°C)随缝深(y:cm)变化的曲线：
                             canvas#steady_result_canvas
                             img.responsive-img.materialboxed#steady_result_img.hide
                 div#unsteady.col.s12.canvas-input
@@ -59,7 +62,7 @@ block content
                                     input.validate.yahei(type="text",placeholder="单位:°C.")
                                     label.yahei 火源温度Tf
                                 div.input-field.col.s12
-                                    input.validate.yahei(type="text",placeholder="大于1且不大于4,单位:cm.")
+                                    input.validate.yahei(type="text",placeholder="不小于1且不大于4,单位:cm.")
                                     label.yahei 混凝土板缝宽
                                 div.col.s12.m6.l6
                                     a.btn.waves-effect.yahei.right#unsteady_run 计算
@@ -77,12 +80,14 @@ block content
                                             input.validate.yahei(disabled,type="text",placeholder="")
                                             label.yahei 温度Tg
                         div.col.l7.m12.s12.canvas-container#unsteady_result
-                            p.yahei.red-text 温度(Tg:K)随缝深(y:cm)与时间(t:s)变化的曲线：
+                            p.yahei.red-text 温度(Tg:°C)随缝深(y:cm)与时间(t:s)变化的曲线：
                             canvas#unsteady_result_canvas.hide
                             img.responsive-img.materialboxed#unsteady_result_img
                 div#about.col.s12
                     h4.yahei 关于该计算平台
-                    p.yahei _(:зゝ∠)_这是一个很流比的东东~
+                    p.yahei 该软件能够计算混凝土狭缝内的空气温度分布规律。
+                    p.yahei 隧道衬砌结构是为了防止围岩变形或坍塌，沿隧道洞身周边用钢筋混凝土等材料修建的永久性支护结构。盾构隧道衬砌管片相接的错缝内，膨胀螺栓对管片之间的锚固起了至关重要的作用。但是在火灾高温下，螺栓在温度超过300℃时就基本丧失了抗剪受拉能力，这样会削弱隧道衬砌结构的整体承载能力。
+                    p.yahei 通过计算结果可以了解隧道衬砌结构内螺栓的温度，为隧道衬砌结构的防火保护提高参考价值。
 
 
     script.
@@ -109,6 +114,7 @@ block content
                 $('#steady_result').fadeOut(300)
                 var p = document.querySelectorAll("#steady input")
                 for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
+                cSteady={id:"#steady_result_canvas",img:"#steady_result_img",x:0,y:0,points:[],max:{},offsetX:60,offsetY:20}
             })
 
             $('#unsteady_run').click(function(){
@@ -135,6 +141,7 @@ block content
                 $('#unsteady_result').fadeOut(300)
                 var p = document.querySelectorAll("#unsteady input")
                 for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
+                cUnsteady={id:"#unsteady_result_canvas",img:"#unsteady_result_img",x:0,y:0,points:[],max:{},offsetX:240,offsetY:40,MaxT:2000}
             })
 
             function getfUnsteady(p){
@@ -143,7 +150,7 @@ block content
                 var w=parseFloat($("input",canvasInput)[1].value)
                 var y=parseFloat($("input",canvasInput)[2].value)
                 var t=parseFloat($("input",canvasInput)[3].value)
-                if(!Tf||!w||w<=1||w>4||!y||!t) return -1
+                if(!Tf||!w||w<1||w>4||!y||!t) return -1
                 $("input",canvasInput)[4].value=(fUnsteady(Tf,w,y,t)-273).toFixed(1)+"°C"
             }
 
@@ -272,7 +279,7 @@ block content
                         ctx.moveTo(p.offsetX+0.5,i*detaY+0.5)
                         ctx.lineTo(p.x+0.5,i*detaY+0.5)
                         ctx.fillText((80-10*i).toFixed(0),p.offsetX-72,i*detaY+20.5)
-                        ctx.fillText((p.max.Tg-detaZ*i).toFixed(0),0.5,i*detaY+20.5)
+                        ctx.fillText((p.max.Tg-detaZ*i-273).toFixed(0),0.5,i*detaY+20.5)
                     }
                     var detaX_ = parseInt(p.MaxT / 200)
                         ,detaX = (p.x - p.offsetX) / detaX_
@@ -305,7 +312,7 @@ block content
                 var canvasInput=$(p.id).closest(".canvas-input")[0]
                 var Tf=parseFloat($("input",canvasInput)[0].value)
                 var w=parseFloat($("input",canvasInput)[1].value)
-                if(!Tf||!w||w<=1||w>4) return -1
+                if(!Tf||!w||w<1||w>4) return -1
                 if(p.id=="#steady_result_canvas"){
                     return fSteady(Tf,w,p)
                 }
@@ -325,7 +332,7 @@ block content
                 var detaX=max.x/p.x
 
                 p.points=[]
-                p.max = {x: 0, y: 0, Tg: Math.max(Tf+273,273)}
+                p.max = {x: 0, y: 0, Tg: Math.max(Tf,25)}
                 for(var i=0.5;i<=p.x-p.offsetX;i=i+1){//采样精度
                     var Tg=fTg(Lg,Tc,Tf,w,(i-0.5)*detaX)
                     p.points.push({x:p.offsetX+i,Tg:Math.min(p.max.Tg, Tg),Wy:(i-0.5)*detaX})
@@ -429,7 +436,7 @@ block content
             function fTg(Lg,Tc,Tf,w,y){
                 var Tm=((Tf+273)-(Tc+0)-2576.8*w)*Math.exp(-1*y*Math.sqrt(15/(Lg*w)))
                         +2576.8*w*Math.exp(-0.4281*y)
-                        +Tc
+                        +Tc-273
                 return (Tm.toFixed(4))
             }
 
