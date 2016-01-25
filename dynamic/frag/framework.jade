@@ -11,11 +11,14 @@ html
             block apm
             script(src='/static/lib/jquery.min.js')
             script(src='/static/js/materialize.min.js')
+            script.
+                var jq = $.noConflict()
+            script(src='/static/lib/angular.min.js')
             include ../mixin/footer
         include color
         include fwStyle
         block style
-    body
+    body(ng-app)
         block content
         if(!without_footer)
             +footer

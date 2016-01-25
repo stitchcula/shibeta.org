@@ -77,8 +77,8 @@ block content
                                             input.validate.yahei(type="text",placeholder="0-2000之间,单位:s.")
                                             label.yahei 时间t
                                         div.col.s12.input-field
-                                            input.validate.yahei(disabled,type="text",placeholder="")
-                                            label.yahei 温度Tg
+                                            input.validate.yahei.grey-text(disabled,type="text",placeholder="")
+                                            label.yahei.grey-text 温度Tg
                         div.col.l7.m12.s12.canvas-container#unsteady_result
                             p.yahei.red-text 温度(Tg:°C)随缝深(y:cm)与时间(t:s)变化的曲线：
                             canvas#unsteady_result_canvas.hide
@@ -91,67 +91,70 @@ block content
 
 
     script.
-        $(function(){
-            $('ul.tabs').tabs()
-            $('#steady_result').fadeOut(0)
-            $('#unsteady_result').fadeOut(0)
-            $('#unsteady_result_input').fadeOut(0)
-            $('.materialboxed').materialbox()
+        jQuery(function(){
+            jQuery('ul.tabs').tabs()
+            jQuery('#steady_result').fadeOut(0)
+            jQuery('#unsteady_result').fadeOut(0)
+            jQuery('#unsteady_result_input').fadeOut(0)
+            jQuery('.materialboxed').materialbox()
 
             //canvas init
             var cSteady={id:"#steady_result_canvas",img:"#steady_result_img",x:0,y:0,points:[],max:{},offsetX:60,offsetY:20}//画布域
                     ,cUnsteady={id:"#unsteady_result_canvas",img:"#unsteady_result_img",x:0,y:0,points:[],max:{},offsetX:240,offsetY:40,MaxT:2000}
             var offsetX=60,offsetY=20//兼容保留
 
-            $('#steady_run').click(function(){
-                $('#steady_result').fadeIn(300,function(){
+            jQuery('#steady_run').click(function(){
+                cSteady={id:"#steady_result_canvas",img:"#steady_result_img",x:0,y:0,points:[],max:{},offsetX:60,offsetY:20}
+                jQuery('#steady_result').fadeIn(300,function(){
                     CanvasReset(cSteady)
                     //$(window).resize(function(){CanvasReset(cSteady)})
                 })
             })
 
-            $('#steady_clean').click(function(){
-                $('#steady_result').fadeOut(300)
+            jQuery('#steady_clean').click(function(){
+                jQuery('#steady_result').fadeOut(300)
                 var p = document.querySelectorAll("#steady input")
                 for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
                 cSteady={id:"#steady_result_canvas",img:"#steady_result_img",x:0,y:0,points:[],max:{},offsetX:60,offsetY:20}
             })
 
-            $('#unsteady_run').click(function(){
-                $('#unsteady_result').fadeIn(300,function(){
+            jQuery('#unsteady_run').click(function(){
+                cUnsteady={id:"#unsteady_result_canvas",img:"#unsteady_result_img",x:0,y:0,points:[],max:{},offsetX:240,offsetY:40,MaxT:2000}
+                jQuery('#unsteady_result').fadeIn(300,function(){
                     CanvasReset(cUnsteady)
                     //$(window).resize(function(){CanvasReset(cUnsteady)})
-                    $("input",$(cUnsteady.id).closest(".canvas-input")[0]).unbind('blur').blur(function(){
+                    jQuery("input",jQuery(cUnsteady.id).closest(".canvas-input")[0]).unbind('blur').blur(function(){
                         getfUnsteady(cUnsteady)
                     })
-                    $("#unsteady_result_img").mousemove(function (e) {
-                        var w=$(this).width()
-                        var x = parseInt((e.pageX-$(this).offset().left)*cUnsteady.x/w)-cUnsteady.offsetX
-                        var y = parseInt((e.pageY-$(this).offset().top)*cUnsteady.x/w)
+                    jQuery("#unsteady_result_img").mousemove(function (e) {
+                        var w=jQuery(this).width()
+                        var x = parseInt((e.pageX-jQuery(this).offset().left)*cUnsteady.x/w)-cUnsteady.offsetX
+                        var y = parseInt((e.pageY-jQuery(this).offset().top)*cUnsteady.x/w)
                         y=cUnsteady.y-cUnsteady.offsetY-y
-                        if(x<0||y>cUnsteady.y-cUnsteady.offsetY) return 0
-                        $("input",$(cUnsteady.id).closest(".canvas-input")[0])[2].value=cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].Wy
-                        $("input",$(cUnsteady.id).closest(".canvas-input")[0])[3].value=cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].t
-                        $("input",$(cUnsteady.id).closest(".canvas-input")[0])[4].value=(cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].Tg-273).toFixed(1)+"°C"
+                        //if(x<0||y>cUnsteady.y-cUnsteady.offsetY) return 0
+                        if(x<0||y<0) return 0
+                        jQuery("input",jQuery(cUnsteady.id).closest(".canvas-input")[0])[2].value=cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].Wy
+                        jQuery("input",jQuery(cUnsteady.id).closest(".canvas-input")[0])[3].value=cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].t
+                        jQuery("input",jQuery(cUnsteady.id).closest(".canvas-input")[0])[4].value=(cUnsteady.points[x*(cUnsteady.y-cUnsteady.offsetY)+y].Tg).toFixed(1)+"°C"
                     })
                 })
             })
 
-            $('#unsteady_clean').click(function(){
-                $('#unsteady_result').fadeOut(300)
+            jQuery('#unsteady_clean').click(function(){
+                jQuery('#unsteady_result').fadeOut(300)
                 var p = document.querySelectorAll("#unsteady input")
                 for (var i = 0; i <= p.length; i++) if (p[i]) p[i].value = null
                 cUnsteady={id:"#unsteady_result_canvas",img:"#unsteady_result_img",x:0,y:0,points:[],max:{},offsetX:240,offsetY:40,MaxT:2000}
             })
 
             function getfUnsteady(p){
-                var canvasInput=$(p.id).closest(".canvas-input")[0]
-                var Tf=parseFloat($("input",canvasInput)[0].value)
-                var w=parseFloat($("input",canvasInput)[1].value)
-                var y=parseFloat($("input",canvasInput)[2].value)
-                var t=parseFloat($("input",canvasInput)[3].value)
+                var canvasInput=jQuery(p.id).closest(".canvas-input")[0]
+                var Tf=parseFloat(jQuery("input",canvasInput)[0].value)
+                var w=parseFloat(jQuery("input",canvasInput)[1].value)
+                var y=parseFloat(jQuery("input",canvasInput)[2].value)
+                var t=parseFloat(jQuery("input",canvasInput)[3].value)
                 if(!Tf||!w||w<1||w>4||!y||!t) return -1
-                $("input",canvasInput)[4].value=(fUnsteady(Tf,w,y,t)-273).toFixed(1)+"°C"
+                jQuery("input",canvasInput)[4].value=(fUnsteady(Tf,w,y,t)).toFixed(1)+"°C"
             }
 
             //fSteady(360,3.6)
@@ -161,9 +164,9 @@ block content
                 if(!canvases.length) canvases=[canvases]
                 scale=scale||0.6
                 for(var i=0;i<canvases.length;i++){
-                    var canvas=$(canvases[i].id)
+                    var canvas=jQuery(canvases[i].id)
 
-                    var container=$(canvases[i].id).closest('.canvas-container')
+                    var container=jQuery(canvases[i].id).closest('.canvas-container')
                     if(canvases[i].id=="#unsteady_result_canvas") canvases[i].x=1280//
                     else canvases[i].x = parseInt(container.width())
                     canvases[i].y=parseInt(canvases[i].x*scale)
@@ -173,8 +176,8 @@ block content
                     //fCanvasPaint(canvases[i].id)
                     var dataUrl=CanvasPaint(canvases[i])
                     if(canvases[i].id=="#unsteady_result_canvas"){
-                        $(canvases[i].img).get(0).src=dataUrl
-                        $('#unsteady_result_input').fadeIn(0)
+                        jQuery(canvases[i].img).get(0).src=dataUrl
+                        jQuery('#unsteady_result_input').fadeIn(0)
                     }
                 }
             }
@@ -182,7 +185,7 @@ block content
             function CanvasPaint(p){
                 CanvasCal(p)
 
-                var ctx=$(p.id).get(0).getContext('2d')
+                var ctx=jQuery(p.id).get(0).getContext('2d')
                 ctx.clearRect(0, 0, p.x, p.y)
 
                 if(p.id=="#steady_result_canvas") {
@@ -207,15 +210,17 @@ block content
                     }
                     console.log("paint:"+(new Date() - time4) / 1000)
                 }
+                var time5=new Date()
                 CanvasPaintCoo(p)
+                console.log("coo:"+(new Date() - time5) / 1000)
 
-                return $(p.id).get(0).toDataURL("image/png")
+                return jQuery(p.id).get(0).toDataURL("image/png")
             }
 
             function CanvasPaintCoo(p,arr,color){
                 if(!color||!color.length) color=[]
 
-                var ctx=$(p.id).get(0).getContext('2d')
+                var ctx=jQuery(p.id).get(0).getContext('2d')
                 ctx.lineWidth=1
 
                 if(p.id=="#steady_result_canvas") {
@@ -243,7 +248,7 @@ block content
                         ctx.fillText((i*yab).toFixed(1), 0.5,y+10+ 0.5)
                     }
 
-                    var xab=(p.max.Wy-p.points[p.points.length - 16].Wy>20)?10:5
+                    var xab=(p.max.Wy-p.points[p.points.length - 16].Wy>1)?0.2:0.1
                     var xa=Math.ceil(p.max.Wy/xab)
                     var xb=Math.floor(p.points[p.points.length - 16].Wy/xab)
                     if(p.points[p.points.length - 16].Wy-xb*xab<1.5) xb=xb-1
@@ -253,17 +258,17 @@ block content
                         var x=parseInt(p.offsetX+j*xab*(p.points[p.points.length - 16].x-p.offsetX)/p.points[p.points.length - 16].Wy)
                         ctx.moveTo(x +0.5,p.y-p.offsetY-0.5)
                         ctx.lineTo(x +0.5,0.5)
-                        ctx.fillText((j*xab).toFixed(1),x +0.5-23, p.y - 1.5)
+                        ctx.fillText((j*xab).toFixed(2),x +0.5-23, p.y - 1.5)
                     }
 
                     ctx.stroke()
 
-                    ctx.fillText(0, 20.5, p.y - 1.5)
+                    //ctx.fillText(0, 20.5, p.y - 1.5)
                     //ctx.fillText(parseFloat(p.max.Tg).toFixed(1), 0.5, parseInt(p.max.y + 15 / 2) - 0.5)
-                    ctx.fillText(parseFloat(p.max.Wy).toFixed(1), parseInt(p.max.x - 15 / 2) - 15.5, p.y - 1.5)
+                    ctx.fillText(parseFloat(p.max.Wy).toFixed(2), parseInt(p.max.x - 15 / 2) - 15.5, p.y - 1.5)
                     ctx.fillText(parseFloat(p.points[0].Tg).toFixed(1), 0.5, parseInt(p.points[0].y + 10) - 0.5)
                     ctx.fillText(parseFloat(p.points[p.points.length - 16].Tg).toFixed(1), 0.5, parseInt(p.points[p.points.length - 16].y+ 10) - 0.5)
-                    ctx.fillText(parseFloat(p.points[p.points.length - 16].Wy).toFixed(1), parseInt(p.points[p.points.length - 16].x - 15 / 2) - 15.5, p.y - 1.5)
+                    ctx.fillText(parseFloat(p.points[p.points.length - 16].Wy).toFixed(2), parseInt(p.points[p.points.length - 16].x - 15 / 2) - 15.5, p.y - 1.5)
                 }
                 if(p.id=="#unsteady_result_canvas") {
                     ctx.lineWidth=1
@@ -274,12 +279,12 @@ block content
                     ctx.fillStyle = color[1] || "#9e9e9e"
                     //坐标轴
                     var detaY=(p.y-p.offsetY)/8
-                    var detaZ=(p.max.Tg-273)/8//???
+                    var detaZ=p.max.Tg/8//???
                     for(var i=0;i<=8;i++){
                         ctx.moveTo(p.offsetX+0.5,i*detaY+0.5)
                         ctx.lineTo(p.x+0.5,i*detaY+0.5)
                         ctx.fillText((80-10*i).toFixed(0),p.offsetX-72,i*detaY+20.5)
-                        ctx.fillText((p.max.Tg-detaZ*i-273).toFixed(0),0.5,i*detaY+20.5)
+                        ctx.fillText((p.max.Tg-detaZ*i).toFixed(0),0.5,i*detaY+20.5)
                     }
                     var detaX_ = parseInt(p.MaxT / 200)
                         ,detaX = (p.x - p.offsetX) / detaX_
@@ -309,9 +314,9 @@ block content
             }
 
             function CanvasCal(p){//获取input并计算
-                var canvasInput=$(p.id).closest(".canvas-input")[0]
-                var Tf=parseFloat($("input",canvasInput)[0].value)
-                var w=parseFloat($("input",canvasInput)[1].value)
+                var canvasInput=jQuery(p.id).closest(".canvas-input")[0]
+                var Tf=parseFloat(jQuery("input",canvasInput)[0].value)
+                var w=parseFloat(jQuery("input",canvasInput)[1].value)
                 if(!Tf||!w||w<1||w>4) return -1
                 if(p.id=="#steady_result_canvas"){
                     return fSteady(Tf,w,p)
@@ -328,9 +333,9 @@ block content
                 var Tc = fTc(w)
                 if(typeof(p)!="object") return fTg(Lg,Tc,Tf,w,p)//返回确定y时Tg的值
 
-                var max=fGetMax(0.00001,Lg,Tc,Tf,w)
+                var max={x:0.8}//fGetMax(0.001,Lg,Tc,Tf,w)
                 var detaX=max.x/p.x
-
+                console.log("Tf:"+Tf)
                 p.points=[]
                 p.max = {x: 0, y: 0, Tg: Math.max(Tf,25)}
                 for(var i=0.5;i<=p.x-p.offsetX;i=i+1){//采样精度
@@ -364,7 +369,9 @@ block content
 
                 //p.MaxT=2000//时间范围
                 detaX=p.MaxT/(p.x-p.offsetX)
-                detaY=80/(p.y-p.offsetY)//0.8m
+                detaY=0.8/(p.y-p.offsetY)//0.8m
+
+                p.max = {x: 0, y: 0,z:0 ,Tg: Math.max(Tf,25)}//Tg:C
 
                 //优化的快速算法
                 var time1=new Date()
@@ -372,33 +379,16 @@ block content
                 for(var ix=0.5;ix<=p.x-p.offsetX;ix=ix+1)
                     for(var iy=0.5;iy<=p.y-p.offsetY;iy=iy+1){
                         var Tg=fUnTg(Lg,Tc,Tf,w,(iy-0.5)*detaY,(ix-0.5)*detaX)
-                        p.points[(ix-0.5)*(p.y-p.offsetY)+iy-0.5]={x:p.offsetX+ix,y:p.y-p.offsetY-iy,Tg:Tg,t:((ix-0.5)*detaX).toFixed(1),Wy:((iy-0.5)*detaY).toFixed(1)}
+                        p.points[(ix-0.5)*(p.y-p.offsetY)+iy-0.5]={x:p.offsetX+ix,y:p.y-p.offsetY-iy,Tg:Math.min(p.max.Tg, Tg),t:((ix-0.5)*detaX).toFixed(1),Wy:((iy-0.5)*detaY*100).toFixed(1)}
                     }
-                console.log((new Date()-time1)/1000)
-                /*
-                p.points=[]
-                for(var ix=0.5;ix<=p.x-p.offsetX;ix=ix+1)
-                    for(var iy=0.5;iy<=p.y-p.offsetY;iy=iy+1){
-                        var Tg=fUnTg(Lg,Tc,Tf,w,(iy-0.5)*detaY,(ix-0.5)*detaX)
-                        p.points.push({x:p.offsetX+ix,y:p.y-p.offsetY-iy,Tg:Tg,t:((ix-0.5)*detaX).toFixed(1),Wy:((iy-0.5)*detaY).toFixed(1)})
-                    }
-                    */
-                var time2=new Date()
-                //find the max point,奇怪的js垃圾算法
-                p.max = {x: 0, y: 0,z:0 ,Tg: 0}
-                /*
-                for(var j=0;j<p.points.length;j++){
-                    p.max.Tg=Math.max(p.points[j].Tg,p.max.Tg)
-                }
-                */
-                p.max.Tg=Tf+273//???
-                console.log((new Date()-time2)/1000)
+                console.log("cal:"+(new Date()-time1)/1000)
+
                 var time3=new Date()
-                var scaleZ=1020/(p.max.Tg-273)//???
+                var scaleZ=1020/p.max.Tg//???
                 for(var k=0;k<p.points.length;k++){
                     if(p.points[k].Tg==p.max.Tg)
                         p.max=p.points[k]
-                    var g=Math.round((p.points[k].Tg-273)*scaleZ)//???
+                    var g=Math.round(p.points[k].Tg*scaleZ)//???
                         ,b=255
                         ,r=0
                     if(g>765){
@@ -418,7 +408,7 @@ block content
                     }
                     p.points[k].z='rgba('+r+','+g+','+b+',1)'
                 }
-                console.log((new Date()-time3)/1000)
+                console.log("toRGB:"+(new Date()-time3)/1000)
 
                 return p.points
             }
@@ -433,17 +423,26 @@ block content
                 }
             }
 
-            function fTg(Lg,Tc,Tf,w,y){
-                var Tm=((Tf+273)-(Tc+0)-2576.8*w)*Math.exp(-1*y*Math.sqrt(15/(Lg*w)))
-                        +2576.8*w*Math.exp(-0.4281*y)
-                        +Tc-273
+            function fTg(Lg,Tc,Tf,w,y){// ,C,C,cm,m
+                w=w/100//cm->m
+                Tf=Tf+273//C->K
+                var kLam=0.4281
+                var bolCons=5.67*0.00000001
+                var eRad=bolCons*w*Tf*Tf*Tf*Tf
+                var c1=kLam*eRad/(kLam*kLam*Lg*w-15)
+                var Tm=(Tf-Tc-c1)*Math.exp(-1*y*Math.sqrt(15/Lg/w))
+                        +c1*Math.exp(-1*y*kLam)
+                        +Tc-273//C
                 return (Tm.toFixed(4))
             }
 
-            function fUnTg(Lg,Tc,Tf,w,y,t){
-                var Tm=fTg(Lg,Tc,Tf,w,y)
+            function fUnTg(Lg,Tc,Tf,w,y,t){// ,C,C,cm,m,t
+                var Tm=fTg(Lg,Tc,Tf,w,y)+273//K
                 var K2=fK2(w,y)
-                var Tg=Tm/(1+(Tm-298)/298*Math.exp(-1*Tm*t*K2*0.000001))
+                //var X1=fX1(w,y)
+                //var X2=fX2(w,y)
+                //var Tg=X2*Tm/(1+(X2*Tm-293)/298*Math.exp(-1*X1*X2*Tm*t*K2))-273
+                var Tg=Tm/(1+(Tm-293)/298*Math.exp(-1*Tm*t*K2))-273
                 return (Tg.toFixed(4))
             }
 
@@ -465,27 +464,49 @@ block content
                 else return -1
             }
 
-            function fK2(w,y){//*0.000001
+            function interpolation(arr,x,y){//y,w
+                x=(arr[0][arr[0].length-1]>x)?x:(arr[0][arr[0].length-1]-0.00001)
+                y=(arr[arr.length-1][0]>y)?y:(arr[arr.length-1][0]-0.00001)
+                var xi,yi
+                for(xi=1;arr[0][xi]<=x;xi++);
+                for(yi=1;arr[yi][0]<=y;yi++);
+                var res11=arr[yi-1][xi-1]+(arr[yi-1][xi]-arr[yi-1][xi-1])/(arr[0][xi]-arr[0][xi-1])*(x-arr[0][xi-1])
+                var res12=arr[yi][xi-1]+(arr[yi][xi]-arr[yi][xi-1])/(arr[0][xi]-arr[0][xi-1])*(x-arr[0][xi-1])
+                var res=res11+(res12-res11)/(arr[yi][0]-arr[yi-1][0])*(y-arr[yi-1][0])
+                return res
+            }
+
+            function fK2(w,y){
                 var k=[
-                    [10.3,2.5,0.6,0.4,0.6,0.8,1.0,1.4,1.35,1.3,1.25,1.2,1.15,1.1,1.05,1.0,1.1,1.1,1.2,0.9,0.5],
-                    [11.0,4.0,1.2,0.8,1.0,1.6,2.2,3.2,5.4,7.8,7.8,7.8,7.8,7.0,6.0,4.6,3.4,2.6,3.0,3.0,2.0],
-                    [11.0,6.5,1.8,1.0,1.6,4.8,12.0,12.1,12.1,12.0,11.8,11.6,11.7,11.7,11.7,11.7,11.7,12.2,13.6,14.1,15.8],
-                    [11.0,8.9,6.6,4.0,6.2,7.2,9.0,10.5,12.0,13.6,13.8,14.0,14.2,14.4,14.6,14.8,15.0,15.2,14.5,14.7,16.5],
-                    [11.2,10.0,9.3,9.3,9.4,9.6,11.5,12.5,12.0,11.8,11.5,11.0,11.13,11.26,11.39,11.52,11.65,11.8,11.5,11.3,14.8]
+                    [0,0,0.02,0.04,0.06,0.08,0.1,0.12,0.14,0.16,0.18,0.2,0.24,0.28,0.32,0.36,0.4,0.44,0.48,0.52,0.56,0.6,0.64,0.68,0.72,0.76,0.8],
+                    [1.04E-05,6.25E-06,2.56E-06,1.07E-06,6.53E-07,4.92E-07,4.37E-07,4.31E-07,4.74E-07,5.48E-07,5.90E-07,8.18E-07,1.20E-06,1.19E-06,1.17E-06,1.15E-06,1.13E-06,1.12E-06,1.11E-06,1.10E-06,1.09E-06,1.09E-06,1.12E-06,1.21E-06,8.94E-07,5.00E-07],
+                    [1.07E-05,8.48E-06,4.14E-06,1.77E-06,1.23E-06,1.02E-06,9.58E-07,8.62E-07,1.06E-06,1.34E-06,1.64E-06,2.21E-06,3.20E-06,5.42E-06,7.61E-06,7.68E-06,7.72E-06,7.70E-06,7.15E-06,6.11E-06,4.79E-06,3.49E-06,2.78E-06,3.13E-06,3.09E-06,2.15E-06],
+                    [1.08E-05,8.23E-06,6.48E-06,3.67E-06,1.73E-06,1.10E-06,1.06E-06,1.25E-06,1.58E-06,2.35E-06,4.69E-06,1.20E-05,1.22E-05,1.21E-05,1.20E-05,1.18E-05,1.16E-05,1.17E-05,1.18E-05,1.19E-05,1.19E-05,1.18E-05,1.23E-05,1.35E-05,1.41E-05,1.57E-05],
+                    [1.11E-05,8.75E-06,8.83E-06,7.98E-06,6.69E-06,5.70E-06,4.45E-06,3.91E-06,6.28E-06,6.14E-06,7.39E-06,9.06E-06,1.06E-05,1.21E-05,1.36E-05,1.38E-05,1.40E-05,1.42E-05,1.44E-05,1.45E-05,1.47E-05,1.49E-05,1.52E-05,1.45E-05,1.47E-05,1.66E-05],
+                    [1.13E-05,1.03E-05,1.00E-05,9.78E-06,9.33E-06,9.30E-06,9.34E-06,9.38E-06,9.40E-06,9.35E-06,9.59E-06,1.14E-05,1.26E-05,1.21E-05,1.19E-05,1.15E-05,1.10E-05,1.11E-05,1.12E-05,1.13E-05,1.14E-05,1.15E-05,1.18E-05,1.25E-05,1.24E-05,1.47E-05]
                 ]
-                    ,detaKn=[0.5,0.5,1,1]
-                    ,LKn=[1,1.5,2,3]
-                    ,kn=0
-                if(w>4) return -1
-                if(w>3) kn=3
-                if(w>2) kn=2
-                if(w>1.5) kn=1
-                if(w>=1) kn=0
-                else return -1
-                var km=parseInt(y/4)
-                var K21=k[kn][km]+(k[kn][km+1]-k[kn][km])/4*(y-km*4)
-                var K22=k[kn+1][km]+(k[kn+1][km+1]-k[kn+1][km])/4*(y-km*4)
-                var K2=K21+(K22-K21)/detaKn[kn]*(w-LKn[kn])
-                return K2
+                return interpolation(k,y,w)
+            }
+            function fX1(w,y){
+                var k=[
+                            [0,0,0.02,0.04,0.06,0.08,0.1,0.12,0.14,0.16,0.18,0.2,0.24,0.28,0.4,0.44,0.48,0.52,0.56,0.6,0.64,0.68,0.72,0.76,0.8],
+                            [1,1.22393, 0.16872, 3.71465, 0.44915, 0.55166, 0.67583, 0.02523, 0.00438, 0.003, 0.00358, 0.02276, 0.09305, 0.28301, 0.75815, 0.81386, 1.63714, 1.01752, 2.57636, 1.35388, 1.69158, 1.02967, 2.05994, 3.16837, 4.31758],
+                            [1.5,1.17948, 1.57913, 2.08862, 0.36062, 0.39949, 0.29189, 0.01361, 0.00131, 0.01938, 0.06597, 0.20141, 0.92991, 1.65841, 2.38691, 3.1154, 3.8439, 4.5724, 4.56139, 6.29733, 2.31365, 0.76403, 1.65553, 1.40492, 0.64957],
+                            [2,1.1237, 0.25186, 0.204, 0.20143, 0.37982, 0.60582, 0.74882, 0.3401, 0.89087, 2.29154, 2.54226, 4.49822, 3.3573, 2.41, 1.46348, 1.83, 2.2, 2.57, 2.94975, 3.18578, 3.42181, 3.65785, 2.33114, 1.40865],
+                            [3,1.11293, 1.398, 1.1389, 1.51159, 1.73043, 1.34488, 2.14096, 0.59058, 1.43056, 1.83865, 1.76729, 1.95384, 2.14039, 2.32694, 2.51349, 2.70004, 2.88659, 3.07314, 3.25969, 3.44624, 3.63279, 1.21453, 0.93887, 0.70835],
+                            [4,0.89999, 1.03375, 1.22309, 1.14811, 1.17331, 1.29833, 1.44956, 1.08176, 1.48928, 1.43824, 1.28799, 2.02353, 0.13363, 0.34138, 0.54912, 0.75687, 0.96462, 1.17236, 1.38011, 1.58785, 1.7956, 1.16974, 0.96203, 0.7156]
+                        ]
+                return interpolation(k,y,w)
+            }
+            function fX2(w,y){
+                var k=[
+                            [0,0,0.02,0.04,0.06,0.08,0.1,0.12,0.14,0.16,0.18,0.2,0.24,0.28,0.4,0.44,0.48,0.52,0.56,0.6,0.64,0.68,0.72,0.76,0.8],
+                            [1,0.98042, 0.90922, 1.08256, 0.53484, 1.32374, 1.28474, 1.26363, 1.24253, 1.22142, 1.20031, 1.1792, 1.1581, 1.13699, 0.96003, 0.95394, 0.95091, 0.95989, 0.948, 0.97652, 0.95415, 0.97585, 0.9853, 0.96379, 0.95155],
+                            [1.5,0.992, 1.04238, 1.03216, 1.17338, 1.2396, 1.45755, 1.38032, 1.3031, 1.22587, 1.14865, 1.07142, 0.9942, 0.91697, 0.99305, 0.95514, 1.01167, 0.96699, 0.99165, 1.03227, 0.99947, 0.98166, 1.03334, 1.10331, 1.13014],
+                            [2,0.99779, 0.89345, 0.96254, 1.06366, 1.10399, 1.01823, 0.97636, 0.99847, 0.83763, 0.82459, 0.81756, 0.83974, 0.83978, 0.85857, 0.81542, 0.8844, 0.88365, 0.88993, 0.85579, 0.89667, 0.92937, 0.93518, 0.95575, 1.01424],
+                            [3,0.99919, 0.97727, 0.94284, 1.01292, 0.99046, 0.94504, 0.93448, 0.98863, 0.95696, 0.92848, 0.90173, 0.93, 0.96, 0.99155, 0.9181, 1.02674, 1.00298, 0.98785, 0.96258, 0.97963, 1.00068, 0.98026, 0.97871, 1.0033],
+                            [4,0.97463, 0.99945, 1.03327, 0.98021, 0.99155, 0.98808, 0.99487, 0.9725, 0.98393, 0.98263, 0.96981, 0.99851, 1.58111, 1.01136, 0.90385, 1.04517, 1.0169, 1.01263, 0.91111, 0.9351, 1.02852, 0.99573, 1.03897, 1.13339]
+                        ]
+                return interpolation(k,y,w)
             }
         })
