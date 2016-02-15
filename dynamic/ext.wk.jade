@@ -251,8 +251,8 @@ block content
                     var xab=(p.max.Wy-p.points[p.points.length - 16].Wy>1)?0.2:0.1
                     var xa=Math.ceil(p.max.Wy/xab)
                     var xb=Math.floor(p.points[p.points.length - 16].Wy/xab)
-                    if(p.points[p.points.length - 16].Wy-xb*xab<1.5) xb=xb-1
-                    if(xa*xab-p.max.Wy<1.5) xa=xa+1
+                    if(p.points[p.points.length - 16].Wy-xb*xab<1.4) xb=xb-1
+                    if(xa*xab-p.max.Wy<1.4) xa=xa+1
 
                     for(var j=xa;j<=xb;j++){
                         var x=parseInt(p.offsetX+j*xab*(p.points[p.points.length - 16].x-p.offsetX)/p.points[p.points.length - 16].Wy)
@@ -438,7 +438,7 @@ block content
 
             function fUnTg(Lg,Tc,Tf,w,y,t){// ,C,C,cm,m,t
                 var Tm=fTg(Lg,Tc,Tf,w,y)+273//K
-                var K2=fK2o(w,y)
+                var K2=fK2(w,y)
                 var X1=fX1(w,y)
                 var X2=fX2(w,y)
                 var Tg=X2*Tm/(1+(X2*Tm-293)/293*Math.exp(-1*X1*X2*Tm*t*K2))//-273
