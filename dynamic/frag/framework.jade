@@ -13,12 +13,13 @@ html
             script(src='/static/js/materialize.min.js')
             script.
                 var jq = $.noConflict()
-            script(src='/static/lib/angular.min.js')
+            //script(src='/static/lib/angular.min.js')
             include ../mixin/footer
         include color
         include fwStyle
         block style
-    body(ng-app)
+    //body(ng-app)
+    body
         block content
         if(!without_footer)
             +footer
